@@ -1294,6 +1294,10 @@
               <strong>Hash de pago</strong>
               <p>Cuando se pague, el admin podrá guardar el hash o nota de pago para control interno.</p>
             </article>
+            <article class="verify-card">
+              <strong>Depósito de tareas</strong>
+              <p>El anunciante deposita reward + 5 TASK de fee y pega el hash. El admin verifica antes de abrir la tarea.</p>
+            </article>
           </div>
         </div>
       </section>
@@ -1386,6 +1390,15 @@
                     <input id="listingReward" type="number" min="10" value="250" required />
                   </label>
                 </div>
+                <div class="balance-card">
+                  <span>Depósito requerido</span>
+                  <strong id="listingDepositTotal">255 TASK</strong>
+                  <p style="margin: 8px 0 0; color: var(--muted); line-height: 1.45;">
+                    Envía reward + 5 TASK de fee a
+                    <strong style="color: var(--soft); overflow-wrap: anywhere;">0xf3542c8A751f880ed6E046881cBF1E3D707d9492</strong>
+                    y pega el hash cuando publiques. La tarea queda pendiente hasta que el admin verifique el depósito.
+                  </p>
+                </div>
                 <button class="btn primary" type="submit">Publicar</button>
               </form>
             </aside>
@@ -1469,6 +1482,11 @@
               </p>
             </article>
             <article class="panel">
+              <h3 style="margin-bottom: 12px;">Depósitos de anunciantes</h3>
+              <div class="admin-list" id="adminTasks">
+                <div class="empty">Ingresa tu token admin para revisar depósitos.</div>
+              </div>
+              <h3 style="margin: 18px 0 12px;">Pruebas de usuarios</h3>
               <div class="admin-list" id="adminClaims">
                 <div class="empty">Ingresa tu token admin para revisar pagos.</div>
               </div>
@@ -1573,6 +1591,8 @@
     <script>
       (() => {
         const TASKTIP_CONTRACT = "0x4a11fBb462AeE25461c8C8c0E2663608cA7B15be";
+        const DEPOSIT_WALLET = "0xf3542c8A751f880ed6E046881cBF1E3D707d9492";
+        const CREATE_TASK_FEE = 5;
         const numberFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
         const app = { apiOnline: false, listings: [] };
         const $ = (selector) => document.querySelector(selector);
@@ -1834,7 +1854,10 @@
             rewardMin: "El reward minimo es 10 TASK.",
             taskPosted: "Tarea publicada. Recuerda cobrar/verificar manualmente el fee antes de activarla si aplica.",
             copied: "Copiado",
-            manualCopy: "Copia manual"
+            manualCopy: "Copia manual",
+            depositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por reward + 5 TASK enviada a la wallet de TASKTIP.",
+            depositRequired: "Antes de publicar envia el deposito requerido y pega el hash.",
+            taskPostedPending: "Tarea recibida. Queda pendiente hasta que el admin verifique el deposito."
           },
           en: {
             loading: "Loading real tasks...",
@@ -1863,7 +1886,10 @@
             rewardMin: "The minimum reward is 10 TASK.",
             taskPosted: "Task published. Remember to collect/verify the fee manually before activating it if needed.",
             copied: "Copied",
-            manualCopy: "Copy manually"
+            manualCopy: "Copy manually",
+            depositHashPrompt: "Paste the deposit hash. It must be the transaction for reward + 5 TASK sent to the TASKTIP wallet.",
+            depositRequired: "Before publishing, send the required deposit and paste the hash.",
+            taskPostedPending: "Task received. It stays pending until the admin verifies the deposit."
           }
         };
         ["pt", "ru", "zh", "ja"].forEach((lang) => (uiText[lang] = { ...uiText.en, ...uiText[lang] }));
@@ -1976,6 +2002,13 @@
             "Transacción": { verification_kind: "tx", validation_value: "0x" },
           };
           return map[category] || { verification_kind: "manual", validation_value: "" };
+        }
+
+        function updateDepositTotal() {
+          const reward = Number($("#listingReward")?.value || 0);
+          const total = Number.isFinite(reward) ? Math.max(0, Math.floor(reward)) + CREATE_TASK_FEE : CREATE_TASK_FEE;
+          const target = $("#listingDepositTotal");
+          if (target) target.textContent = `${numberFormat.format(total)} TASK`;
         }
 
         async function loadListings() {
@@ -2099,6 +2132,10 @@
           const ownerTelegram = prompt(getText("promptOwnerTelegram"));
           if (!ownerTelegram) return;
           const ownerWallet = prompt(getText("promptOwnerWallet"));
+          const depositTx = prompt(
+            `${getText("depositRequired")}\n\nWallet: ${DEPOSIT_WALLET}\nTotal: ${Number($("#listingReward").value || 0) + CREATE_TASK_FEE} TASK\n\n${getText("depositHashPrompt")}`
+          );
+          if (!depositTx) return;
 
           const category = $("#listingCategory").value;
           const listing = {
@@ -2111,6 +2148,7 @@
             owner_telegram: ownerTelegram,
             owner_wallet: ownerWallet || "",
             owner_contact: `${ownerName} ${ownerTelegram} ${ownerWallet || ""}`,
+            deposit_tx: depositTx,
             ...verificationForCategory(category),
           };
 
@@ -2123,8 +2161,9 @@
             await requestApi("/tasks", { method: "POST", body: JSON.stringify(listing) });
             event.currentTarget.reset();
             $("#listingReward").value = 250;
+            updateDepositTotal();
             await loadListings();
-            alert(getText("taskPosted"));
+            alert(getText("taskPostedPending"));
           } catch (error) {
             alert(error.message);
           }
@@ -2203,6 +2242,8 @@
           if (!token) return;
           localStorage.setItem("tasktip_admin_token", token);
 
+          await loadAdminTasks(token);
+
           const container = $("#adminClaims");
           container.innerHTML = '<div class="empty">Cargando pruebas...</div>';
           try {
@@ -2248,6 +2289,65 @@
           }
         }
 
+        async function loadAdminTasks(token) {
+          const container = $("#adminTasks");
+          container.innerHTML = '<div class="empty">Cargando depósitos...</div>';
+          try {
+            const data = await requestApi("/admin/tasks", { headers: { "x-admin-token": token } });
+            if (!data.tasks?.length) {
+              container.innerHTML = '<div class="empty">No hay tareas creadas todavia.</div>';
+              return;
+            }
+
+            container.innerHTML = "";
+            data.tasks.forEach((task) => {
+              const row = document.createElement("article");
+              row.className = "admin-row";
+              row.innerHTML = `
+                <header>
+                  <div>
+                    <h3></h3>
+                    <p></p>
+                  </div>
+                  <span class="tag">${task.deposit_status || "pending"}</span>
+                </header>
+                <div class="tags">
+                  <span class="tag">${task.owner_name}</span>
+                  <span class="tag">${task.owner_telegram || "Sin Telegram"}</span>
+                  <span class="tag">Reward ${numberFormat.format(task.reward)} TASK</span>
+                  <span class="tag">Fee ${numberFormat.format(task.creation_fee || CREATE_TASK_FEE)} TASK</span>
+                  <span class="tag">Total ${numberFormat.format(task.total_deposit || Number(task.reward || 0) + CREATE_TASK_FEE)} TASK</span>
+                </div>
+                <p><strong>Wallet depósito:</strong> ${task.deposit_wallet || DEPOSIT_WALLET}</p>
+                <p><strong>Hash depósito:</strong> ${task.deposit_tx || "Sin hash"}</p>
+                <button class="claim approve-task" type="button">${task.status === "open" ? "Aprobada" : "Aprobar depósito"}</button>
+              `;
+              row.querySelector("h3").textContent = task.title;
+              row.querySelector("header p").textContent = `Task #${task.id} · ${task.category} · ${task.status}`;
+              row.querySelector(".approve-task").addEventListener("click", () => approveTaskDeposit(task.id));
+              container.appendChild(row);
+            });
+          } catch (error) {
+            container.innerHTML = `<div class="empty">${error.message}</div>`;
+          }
+        }
+
+        async function approveTaskDeposit(taskId) {
+          const token = $("#adminToken").value.trim();
+          if (!token) return;
+
+          try {
+            await requestApi(`/admin/tasks/${taskId}/approve`, {
+              method: "POST",
+              headers: { "x-admin-token": token },
+            });
+            await loadAdminClaims();
+            await loadListings();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
         async function payClaim(event, claimId) {
           event.preventDefault();
           const token = $("#adminToken").value.trim();
@@ -2277,6 +2377,7 @@
         $("#copyHero").addEventListener("click", (event) => copyContract(event.currentTarget));
         $("#languageSelect").addEventListener("change", (event) => applyLanguage(event.target.value));
         $("#listingForm").addEventListener("submit", createListing, true);
+        $("#listingReward").addEventListener("input", updateDepositTotal);
         $("#balanceForm").addEventListener("submit", loadBalance);
         $("#adminForm").addEventListener("submit", loadAdminClaims);
         ["#searchInput", "#typeFilter", "#categoryFilter"].forEach((selector) => {
@@ -2286,6 +2387,7 @@
 
         collectTranslatableNodes();
         applyLanguage(currentLanguage);
+        updateDepositTotal();
         loadListings();
       })();
     </script>

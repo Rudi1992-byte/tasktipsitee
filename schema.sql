@@ -9,9 +9,14 @@ CREATE TABLE IF NOT EXISTS tasks (
   owner_telegram TEXT,
   owner_wallet TEXT,
   owner_contact TEXT,
+  deposit_wallet TEXT NOT NULL DEFAULT '0xf3542c8A751f880ed6E046881cBF1E3D707d9492',
+  creation_fee INTEGER NOT NULL DEFAULT 5,
+  total_deposit INTEGER,
+  deposit_tx TEXT,
+  deposit_status TEXT NOT NULL DEFAULT 'pending',
   verification_kind TEXT NOT NULL DEFAULT 'manual',
   validation_value TEXT,
-  status TEXT NOT NULL DEFAULT 'open',
+  status TEXT NOT NULL DEFAULT 'pending',
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

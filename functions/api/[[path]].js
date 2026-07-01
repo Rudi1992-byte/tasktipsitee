@@ -34,6 +34,10 @@ function isWallet(value) {
   return /^0x[a-fA-F0-9]{40}$/.test(String(value || "").trim());
 }
 
+function isTxHash(value) {
+  return /^0x[a-fA-F0-9]{64}$/.test(String(value || "").trim());
+}
+
 function verifyProof(task, proof) {
   const text = String(proof || "").trim();
   const expected = String(task.validation_value || "").trim().toLowerCase();
@@ -87,6 +91,7 @@ async function listTasks(env) {
       SUM(CASE WHEN claims.status = 'verified' THEN 1 ELSE 0 END) AS verified_count
     FROM tasks
     LEFT JOIN claims ON claims.task_id = tasks.id
+    WHERE tasks.status = 'open'
     GROUP BY tasks.id
     ORDER BY tasks.created_at DESC, tasks.id DESC`
   ).all();
@@ -105,20 +110,26 @@ async function createTask(request, env) {
   const ownerTelegram = cleanText(body.owner_telegram || body.ownerTelegram || "", 80);
   const ownerWallet = cleanText(body.owner_wallet || body.ownerWallet || "", 80);
   const ownerContact = cleanText(body.owner_contact || body.ownerContact || body.owner || "", 120);
+  const depositWallet = "0xf3542c8A751f880ed6E046881cBF1E3D707d9492";
+  const creationFee = 5;
+  const totalDeposit = Math.floor(reward) + creationFee;
+  const depositTx = cleanText(body.deposit_tx || body.depositTx || "", 120);
   const verificationKind = cleanText(body.verification_kind || body.verificationKind || "manual", 24);
   const validationValue = cleanText(body.validation_value || body.validationValue || "", 140);
 
   if (!title || !description || !category) return badRequest("Missing title, description or category.");
   if (!Number.isFinite(reward) || reward < 10) return badRequest("Reward must be at least 10 TASK.");
   if (!ownerName) return badRequest("Advertiser name is required.");
+  if (!isTxHash(depositTx)) return badRequest("Valid deposit transaction hash is required.");
 
   const result = await env.DB.prepare(
     `INSERT INTO tasks (
       type, title, description, category, reward,
       owner_name, owner_telegram, owner_wallet, owner_contact,
+      deposit_wallet, creation_fee, total_deposit, deposit_tx, deposit_status, status,
       verification_kind, validation_value
     )
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?)`
   )
     .bind(
       type,
@@ -130,6 +141,10 @@ async function createTask(request, env) {
       ownerTelegram,
       ownerWallet,
       ownerContact,
+      depositWallet,
+      creationFee,
+      totalDeposit,
+      depositTx,
       verificationKind,
       validationValue
     )
@@ -266,6 +281,43 @@ async function listAdminClaims(request, env) {
   return json({ claims: result.results || [] });
 }
 
+async function listAdminTasks(request, env) {
+  const admin = requireAdmin(request, env);
+  if (!admin.ok) return admin.response;
+
+  const result = await env.DB.prepare(
+    `SELECT
+      tasks.*,
+      COUNT(claims.id) AS claim_count,
+      SUM(CASE WHEN claims.status = 'verified' THEN 1 ELSE 0 END) AS verified_count
+     FROM tasks
+     LEFT JOIN claims ON claims.task_id = tasks.id
+     GROUP BY tasks.id
+     ORDER BY tasks.created_at DESC, tasks.id DESC`
+  ).all();
+
+  return json({ tasks: result.results || [] });
+}
+
+async function approveTaskDeposit(request, env, id) {
+  const admin = requireAdmin(request, env);
+  if (!admin.ok) return admin.response;
+
+  const task = await env.DB.prepare("SELECT * FROM tasks WHERE id = ?").bind(id).first();
+  if (!task) return json({ error: "Task not found." }, 404);
+
+  await env.DB.prepare(
+    `UPDATE tasks
+     SET deposit_status = 'verified',
+         status = 'open'
+     WHERE id = ?`
+  )
+    .bind(id)
+    .run();
+
+  return json({ ok: true, id, status: "open", deposit_status: "verified" });
+}
+
 async function sendTelegramMessage(env, chatId, message) {
   if (!env.TELEGRAM_BOT_TOKEN || !chatId) return { ok: false, skipped: true };
 
@@ -287,7 +339,7 @@ function paymentMessage(claim, paidAmount, paymentTx) {
   const shortWallet = `${claim.claimant_wallet.slice(0, 6)}...${claim.claimant_wallet.slice(-4)}`;
   const hashLine = paymentTx ? `\nHash: ${paymentTx}` : "";
   return [
-    "✅ <b>Pago TASKTIP aprobado</b>",
+    "<b>Pago TASKTIP aprobado</b>",
     "",
     `Tarea: ${claim.title}`,
     `Usuario: ${claim.claimant_name}`,
@@ -365,6 +417,10 @@ export async function onRequest(context) {
       return getBalance(env, url.searchParams.get("wallet"));
     }
     if (request.method === "GET" && path === "admin/claims") return listAdminClaims(request, env);
+    if (request.method === "GET" && path === "admin/tasks") return listAdminTasks(request, env);
+    if (request.method === "POST" && parts[0] === "admin" && parts[1] === "tasks" && parts[3] === "approve") {
+      return approveTaskDeposit(request, env, Number(parts[2]));
+    }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "pay") {
       return markClaimPaid(request, env, Number(parts[2]));
     }

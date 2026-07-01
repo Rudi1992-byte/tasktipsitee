@@ -61,6 +61,8 @@ Sitio y marketplace task-to-earn para TASKTIP (TASK) en OOGChain.
 - `POST /api/tasks/:id/claim`: envia prueba para una tarea.
 - `GET /api/claims?wallet=0x...`: lista pruebas de una wallet.
 - `GET /api/balance?wallet=0x...`: muestra balance, pruebas pendientes, pagadas y disponible.
+- `GET /api/admin/tasks`: lista tareas y depositos de anunciantes. Requiere header `x-admin-token`.
+- `POST /api/admin/tasks/:id/approve`: aprueba el deposito y abre la tarea. Requiere header `x-admin-token`.
 - `GET /api/admin/claims`: lista todas las pruebas para administracion. Requiere header `x-admin-token`.
 - `POST /api/admin/claims/:id/pay`: marca una prueba como pagada. Requiere header `x-admin-token`.
 
@@ -69,16 +71,21 @@ Sitio y marketplace task-to-earn para TASKTIP (TASK) en OOGChain.
 Esta version usa publicacion de tareas, revision de pruebas y pagos manuales. El flujo es:
 
 1. El anunciante publica una tarea y deja alias/nombre, Telegram y wallet de referencia.
-2. El admin confirma manualmente el fee o coordinacion.
-3. El usuario envia prueba y deja alias/nombre, Telegram y wallet de pago.
-4. El admin revisa la prueba.
-5. El admin paga TASK manualmente desde su wallet.
-6. El admin registra monto pagado, hash/nota de pago y fecha en D1.
-7. Si hay bot de Telegram configurado, Cloudflare envia la muestra de pago automaticamente.
+2. El sitio calcula `reward + 5 TASK` de fee.
+3. El anunciante deposita el total en la wallet de cobro y pega el hash.
+4. La tarea queda pendiente hasta que el admin verifica el deposito.
+5. El usuario envia prueba y deja alias/nombre, Telegram y wallet de pago.
+6. El admin revisa la prueba.
+7. El admin paga TASK manualmente desde su wallet.
+8. El admin registra monto pagado, hash/nota de pago y fecha en D1.
+9. Si hay bot de Telegram configurado, Cloudflare envia la muestra de pago automaticamente.
 
 ## Reglas Operativas
 
 - El minimo de reward/retiro por tarea es `10 TASK`.
+- El anunciante paga `reward + 5 TASK` para crear una tarea.
+- Wallet de cobro de tareas: `0xf3542c8A751f880ed6E046881cBF1E3D707d9492`.
+- Las tareas no se abren al publico hasta que el admin aprueba el hash del deposito.
 - Una misma wallet solo puede enviar una prueba por tarea.
 - Los pagos pueden demorar hasta 24 horas, segun el tipo de tarea y la revision.
 - La wallet de pago es el dato principal para evitar multicuentas.
@@ -117,3 +124,17 @@ Cuando el admin marca una prueba como pagada desde el panel, el worker intenta e
 ## Siguiente Etapa
 
 El marketplace arranca limpio y guarda tareas reales en D1. Los pagos se hacen manualmente para lanzar mas rapido, con registro interno de pruebas, wallet, monto pagado y hash de pago.
+
+## Migracion Si Ya Existian Tablas
+
+Si ya habias creado `tasks` antes de agregar el deposito de anunciantes, ejecuta esto en la consola D1:
+
+```sql
+ALTER TABLE tasks ADD COLUMN deposit_wallet TEXT NOT NULL DEFAULT '0xf3542c8A751f880ed6E046881cBF1E3D707d9492';
+ALTER TABLE tasks ADD COLUMN creation_fee INTEGER NOT NULL DEFAULT 5;
+ALTER TABLE tasks ADD COLUMN total_deposit INTEGER;
+ALTER TABLE tasks ADD COLUMN deposit_tx TEXT;
+ALTER TABLE tasks ADD COLUMN deposit_status TEXT NOT NULL DEFAULT 'pending';
+```
+
+Si alguna columna ya existe, Cloudflare puede mostrar error en esa linea; continua con las que falten.
