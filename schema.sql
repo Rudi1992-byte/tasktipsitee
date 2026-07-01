@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS claims (
   claimant_wallet TEXT NOT NULL,
   claimant_contact TEXT,
   proof TEXT NOT NULL,
+  screenshot_url TEXT,
   status TEXT NOT NULL DEFAULT 'pending',
   verifier_note TEXT,
   paid_amount INTEGER,

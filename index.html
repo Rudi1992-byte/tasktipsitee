@@ -782,6 +782,18 @@
         gap: 8px;
       }
 
+      .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .danger {
+        border-color: rgba(255, 111, 97, 0.42);
+        background: rgba(255, 111, 97, 0.1);
+        color: var(--red);
+      }
+
       .tokenomics {
         display: grid;
         grid-template-columns: 1.4fr 1fr 0.8fr 0.8fr;
@@ -2094,6 +2106,7 @@
           const claimantChatId = prompt("Telegram chat ID opcional para aviso directo de pago. Si no lo tienes, deja vacío.");
           const proof = prompt(getText("promptProof"));
           if (!proof) return;
+          const screenshotUrl = prompt("Link opcional de captura de pantalla. Puedes subirla a Telegram, Drive, Imgur o similar y pegar el enlace.");
 
           const button = item.querySelector(".claim");
           button.textContent = getText("sending");
@@ -2107,6 +2120,7 @@
                 claimant_wallet: claimantWallet,
                 claimant_contact: `${claimantName} ${claimantTelegram} ${claimantWallet}`,
                 proof,
+                screenshot_url: screenshotUrl || "",
               }),
             });
             button.textContent = result.status === "verified" ? getText("received") : getText("review");
@@ -2174,6 +2188,8 @@
             pending: "Pendiente",
             verified: "Verificada",
             paid: "Pagada",
+            rejected: "Rechazada",
+            deleted: "Eliminada",
           };
           return labels[status] || status;
         }
@@ -2272,6 +2288,12 @@
                   <span class="tag">${numberFormat.format(claim.reward)} TASK</span>
                 </div>
                 <p><strong>Prueba:</strong> ${claim.proof}</p>
+                ${claim.screenshot_url ? `<p><strong>Captura:</strong> <a href="${claim.screenshot_url}" target="_blank" rel="noreferrer">Abrir captura</a></p>` : ""}
+                <div class="admin-actions">
+                  <button class="claim verify-claim" type="button">Aprobar prueba</button>
+                  <button class="claim danger reject-claim" type="button">Rechazar</button>
+                  <button class="claim danger delete-claim" type="button">Eliminar</button>
+                </div>
                 <form class="admin-pay">
                   <input name="paid_amount" type="number" min="10" value="${claim.paid_amount || claim.reward}" />
                   <input name="payment_tx" placeholder="Hash de pago o enlace" value="${claim.payment_tx || ""}" />
@@ -2281,6 +2303,9 @@
               `;
               row.querySelector("h3").textContent = claim.title;
               row.querySelector("header p").textContent = `Claim #${claim.id} · ${claim.category}`;
+              row.querySelector(".verify-claim").addEventListener("click", () => updateClaimAdminStatus(claim.id, "verify"));
+              row.querySelector(".reject-claim").addEventListener("click", () => updateClaimAdminStatus(claim.id, "reject"));
+              row.querySelector(".delete-claim").addEventListener("click", () => deleteClaim(claim.id));
               row.querySelector(".admin-pay").addEventListener("submit", (submitEvent) => payClaim(submitEvent, claim.id));
               container.appendChild(row);
             });
@@ -2320,11 +2345,15 @@
                 </div>
                 <p><strong>Wallet depósito:</strong> ${task.deposit_wallet || DEPOSIT_WALLET}</p>
                 <p><strong>Hash depósito:</strong> ${task.deposit_tx || "Sin hash"}</p>
-                <button class="claim approve-task" type="button">${task.status === "open" ? "Aprobada" : "Aprobar depósito"}</button>
+                <div class="admin-actions">
+                  <button class="claim approve-task" type="button">${task.status === "open" ? "Aprobada" : "Aprobar depósito"}</button>
+                  <button class="claim danger delete-task" type="button">Eliminar tarea</button>
+                </div>
               `;
               row.querySelector("h3").textContent = task.title;
               row.querySelector("header p").textContent = `Task #${task.id} · ${task.category} · ${task.status}`;
               row.querySelector(".approve-task").addEventListener("click", () => approveTaskDeposit(task.id));
+              row.querySelector(".delete-task").addEventListener("click", () => deleteTask(task.id));
               container.appendChild(row);
             });
           } catch (error) {
@@ -2343,6 +2372,56 @@
             });
             await loadAdminClaims();
             await loadListings();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
+        async function deleteTask(taskId) {
+          if (!confirm("Eliminar esta tarea del marketplace?")) return;
+          const token = $("#adminToken").value.trim();
+          if (!token) return;
+
+          try {
+            await requestApi(`/admin/tasks/${taskId}/delete`, {
+              method: "POST",
+              headers: { "x-admin-token": token },
+            });
+            await loadAdminClaims();
+            await loadListings();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
+        async function updateClaimAdminStatus(claimId, action) {
+          const token = $("#adminToken").value.trim();
+          if (!token) return;
+
+          const note = action === "reject" ? prompt("Motivo opcional del rechazo.") || "" : "Aprobado por admin.";
+          try {
+            await requestApi(`/admin/claims/${claimId}/${action}`, {
+              method: "POST",
+              headers: { "x-admin-token": token },
+              body: JSON.stringify({ admin_note: note }),
+            });
+            await loadAdminClaims();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
+        async function deleteClaim(claimId) {
+          if (!confirm("Eliminar esta prueba?")) return;
+          const token = $("#adminToken").value.trim();
+          if (!token) return;
+
+          try {
+            await requestApi(`/admin/claims/${claimId}/delete`, {
+              method: "POST",
+              headers: { "x-admin-token": token },
+            });
+            await loadAdminClaims();
           } catch (error) {
             alert(error.message);
           }

@@ -63,7 +63,11 @@ Sitio y marketplace task-to-earn para TASKTIP (TASK) en OOGChain.
 - `GET /api/balance?wallet=0x...`: muestra balance, pruebas pendientes, pagadas y disponible.
 - `GET /api/admin/tasks`: lista tareas y depositos de anunciantes. Requiere header `x-admin-token`.
 - `POST /api/admin/tasks/:id/approve`: aprueba el deposito y abre la tarea. Requiere header `x-admin-token`.
+- `POST /api/admin/tasks/:id/delete`: elimina una tarea del marketplace. Requiere header `x-admin-token`.
 - `GET /api/admin/claims`: lista todas las pruebas para administracion. Requiere header `x-admin-token`.
+- `POST /api/admin/claims/:id/verify`: aprueba una prueba. Requiere header `x-admin-token`.
+- `POST /api/admin/claims/:id/reject`: rechaza una prueba. Requiere header `x-admin-token`.
+- `POST /api/admin/claims/:id/delete`: elimina una prueba. Requiere header `x-admin-token`.
 - `POST /api/admin/claims/:id/pay`: marca una prueba como pagada. Requiere header `x-admin-token`.
 
 ## Pagos Manuales
@@ -75,10 +79,11 @@ Esta version usa publicacion de tareas, revision de pruebas y pagos manuales. El
 3. El anunciante deposita el total en la wallet de cobro y pega el hash.
 4. La tarea queda pendiente hasta que el admin verifica el deposito.
 5. El usuario envia prueba y deja alias/nombre, Telegram y wallet de pago.
-6. El admin revisa la prueba.
-7. El admin paga TASK manualmente desde su wallet.
-8. El admin registra monto pagado, hash/nota de pago y fecha en D1.
-9. Si hay bot de Telegram configurado, Cloudflare envia la muestra de pago automaticamente.
+6. El usuario puede dejar tambien un enlace de captura de pantalla como evidencia adicional.
+7. El admin revisa la prueba y puede aprobarla, rechazarla o eliminarla.
+8. El admin paga TASK manualmente desde su wallet.
+9. El admin registra monto pagado, hash/nota de pago y fecha en D1.
+10. Si hay bot de Telegram configurado, Cloudflare envia la muestra de pago automaticamente.
 
 ## Reglas Operativas
 
@@ -135,6 +140,7 @@ ALTER TABLE tasks ADD COLUMN creation_fee INTEGER NOT NULL DEFAULT 5;
 ALTER TABLE tasks ADD COLUMN total_deposit INTEGER;
 ALTER TABLE tasks ADD COLUMN deposit_tx TEXT;
 ALTER TABLE tasks ADD COLUMN deposit_status TEXT NOT NULL DEFAULT 'pending';
+ALTER TABLE claims ADD COLUMN screenshot_url TEXT;
 ```
 
 Si alguna columna ya existe, Cloudflare puede mostrar error en esa linea; continua con las que falten.

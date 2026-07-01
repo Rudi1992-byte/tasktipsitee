@@ -38,6 +38,11 @@ function isTxHash(value) {
   return /^0x[a-fA-F0-9]{64}$/.test(String(value || "").trim());
 }
 
+function isOptionalUrl(value) {
+  const text = String(value || "").trim();
+  return !text || /^https?:\/\//i.test(text);
+}
+
 function verifyProof(task, proof) {
   const text = String(proof || "").trim();
   const expected = String(task.validation_value || "").trim().toLowerCase();
@@ -165,10 +170,12 @@ async function claimTask(request, env, id) {
   const claimantWallet = cleanText(body.claimant_wallet || body.claimantWallet || "", 80);
   const claimantContact = cleanText(body.claimant_contact || body.claimantContact || "", 120);
   const proof = cleanText(body.proof, 280);
+  const screenshotUrl = cleanText(body.screenshot_url || body.screenshotUrl || "", 240);
   if (!claimantName) return badRequest("Name or alias is required.");
   if (!claimantTelegram) return badRequest("Telegram contact is required.");
   if (!isWallet(claimantWallet)) return badRequest("Valid payment wallet is required.");
   if (!proof) return badRequest("Proof is required.");
+  if (!isOptionalUrl(screenshotUrl)) return badRequest("Screenshot must be a valid URL.");
 
   const duplicate = await env.DB.prepare("SELECT id FROM claims WHERE task_id = ? AND claimant_wallet = ?")
     .bind(id, claimantWallet)
@@ -179,9 +186,9 @@ async function claimTask(request, env, id) {
   const result = await env.DB.prepare(
     `INSERT INTO claims (
       task_id, claimant_name, claimant_telegram, claimant_chat_id, claimant_wallet, claimant_contact,
-      proof, status, verifier_note, verified_at
+      proof, screenshot_url, status, verifier_note, verified_at
     )
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CASE WHEN ? = 'verified' THEN CURRENT_TIMESTAMP ELSE NULL END)`
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CASE WHEN ? = 'verified' THEN CURRENT_TIMESTAMP ELSE NULL END)`
   )
     .bind(
       id,
@@ -191,6 +198,7 @@ async function claimTask(request, env, id) {
       claimantWallet,
       claimantContact,
       proof,
+      screenshotUrl,
       verification.status,
       verification.note,
       verification.status
@@ -318,6 +326,56 @@ async function approveTaskDeposit(request, env, id) {
   return json({ ok: true, id, status: "open", deposit_status: "verified" });
 }
 
+async function deleteTask(request, env, id) {
+  const admin = requireAdmin(request, env);
+  if (!admin.ok) return admin.response;
+
+  const task = await env.DB.prepare("SELECT * FROM tasks WHERE id = ?").bind(id).first();
+  if (!task) return json({ error: "Task not found." }, 404);
+
+  await env.DB.prepare(
+    `UPDATE tasks
+     SET status = 'deleted',
+         deposit_status = CASE WHEN deposit_status = 'verified' THEN deposit_status ELSE 'rejected' END
+     WHERE id = ?`
+  )
+    .bind(id)
+    .run();
+
+  return json({ ok: true, id, status: "deleted" });
+}
+
+async function updateClaimStatus(request, env, id, status) {
+  const admin = requireAdmin(request, env);
+  if (!admin.ok) return admin.response;
+
+  const claim = await env.DB.prepare("SELECT * FROM claims WHERE id = ?").bind(id).first();
+  if (!claim) return json({ error: "Claim not found." }, 404);
+
+  const body = await readJson(request);
+  const note = cleanText(body.admin_note || body.adminNote || body.verifier_note || body.verifierNote || "", 220);
+
+  await env.DB.prepare(
+    `UPDATE claims
+     SET status = ?,
+         verifier_note = COALESCE(NULLIF(?, ''), verifier_note),
+         verified_at = CASE WHEN ? = 'verified' THEN CURRENT_TIMESTAMP ELSE verified_at END
+     WHERE id = ?`
+  )
+    .bind(status, note, status, id)
+    .run();
+
+  return json({ ok: true, id, status });
+}
+
+async function deleteClaim(request, env, id) {
+  const admin = requireAdmin(request, env);
+  if (!admin.ok) return admin.response;
+
+  await env.DB.prepare("DELETE FROM claims WHERE id = ?").bind(id).run();
+  return json({ ok: true, id, status: "deleted" });
+}
+
 async function sendTelegramMessage(env, chatId, message) {
   if (!env.TELEGRAM_BOT_TOKEN || !chatId) return { ok: false, skipped: true };
 
@@ -420,6 +478,18 @@ export async function onRequest(context) {
     if (request.method === "GET" && path === "admin/tasks") return listAdminTasks(request, env);
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "tasks" && parts[3] === "approve") {
       return approveTaskDeposit(request, env, Number(parts[2]));
+    }
+    if (request.method === "POST" && parts[0] === "admin" && parts[1] === "tasks" && parts[3] === "delete") {
+      return deleteTask(request, env, Number(parts[2]));
+    }
+    if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "verify") {
+      return updateClaimStatus(request, env, Number(parts[2]), "verified");
+    }
+    if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "reject") {
+      return updateClaimStatus(request, env, Number(parts[2]), "rejected");
+    }
+    if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "delete") {
+      return deleteClaim(request, env, Number(parts[2]));
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "pay") {
       return markClaimPaid(request, env, Number(parts[2]));
