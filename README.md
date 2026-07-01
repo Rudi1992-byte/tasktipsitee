@@ -110,6 +110,14 @@ Luego envia ese valor en el header:
 x-admin-token: un_codigo_privado_largo
 ```
 
+El panel admin no aparece en el menu publico. Para abrirlo usa:
+
+```text
+https://tu-sitio.pages.dev/?admin=1#admin
+```
+
+Tambien puedes escribir manualmente `#admin` al final de la URL. Aunque este oculto, el panel sigue protegido por `ADMIN_TOKEN`.
+
 ## Bot De Telegram Sin VPS
 
 El aviso de pago funciona con Cloudflare Pages Functions y Telegram Bot API. No necesitas VPS.

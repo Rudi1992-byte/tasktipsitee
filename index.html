@@ -794,6 +794,10 @@
         color: var(--red);
       }
 
+      .admin-hidden {
+        display: none;
+      }
+
       .tokenomics {
         display: grid;
         grid-template-columns: 1.4fr 1fr 0.8fr 0.8fr;
@@ -1030,7 +1034,6 @@
           <a href="#reglas">Reglas</a>
           <a href="#marketplace">Marketplace</a>
           <a href="#panel">Mi panel</a>
-          <a href="#admin">Admin</a>
           <a href="#tokenomics">Tokenomics</a>
           <a href="#roadmap">Roadmap</a>
         </div>
@@ -1469,7 +1472,7 @@
         </div>
       </section>
 
-      <section id="admin">
+      <section id="admin" class="admin-hidden">
         <div class="shell">
           <div class="section-head">
             <h2>Panel admin</h2>
@@ -1983,6 +1986,19 @@
           renderListings();
         }
 
+        function revealAdminIfRequested() {
+          const params = new URLSearchParams(window.location.search);
+          const shouldShowAdmin =
+            params.get("admin") === "1" ||
+            window.location.hash === "#admin" ||
+            window.location.hash === "#tasktip-admin";
+
+          if (!shouldShowAdmin) return;
+
+          const adminSection = $("#admin");
+          adminSection?.classList.remove("admin-hidden");
+        }
+
         async function copyContract(button) {
           try {
             await navigator.clipboard.writeText(TASKTIP_CONTRACT);
@@ -2464,6 +2480,8 @@
         });
         $("#adminToken").value = localStorage.getItem("tasktip_admin_token") || "";
 
+        revealAdminIfRequested();
+        window.addEventListener("hashchange", revealAdminIfRequested);
         collectTranslatableNodes();
         applyLanguage(currentLanguage);
         updateDepositTotal();
