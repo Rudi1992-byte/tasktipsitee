@@ -333,14 +333,8 @@ async function deleteTask(request, env, id) {
   const task = await env.DB.prepare("SELECT * FROM tasks WHERE id = ?").bind(id).first();
   if (!task) return json({ error: "Task not found." }, 404);
 
-  await env.DB.prepare(
-    `UPDATE tasks
-     SET status = 'deleted',
-         deposit_status = CASE WHEN deposit_status = 'verified' THEN deposit_status ELSE 'rejected' END
-     WHERE id = ?`
-  )
-    .bind(id)
-    .run();
+  await env.DB.prepare("DELETE FROM claims WHERE task_id = ?").bind(id).run();
+  await env.DB.prepare("DELETE FROM tasks WHERE id = ?").bind(id).run();
 
   return json({ ok: true, id, status: "deleted" });
 }
