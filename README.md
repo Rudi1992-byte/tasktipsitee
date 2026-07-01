@@ -15,7 +15,7 @@ Sitio y marketplace task-to-earn para TASKTIP (TASK) en OOGChain.
 - `assets/`: imagen oficial y visuales de TASKTIP.
 - `functions/api/[[path]].js`: API del marketplace con pagos manuales.
 - `schema.sql`: tablas limpias para D1, sin tareas de prueba.
-- `wrangler.toml`: configuracion de Cloudflare.
+- `wrangler.example.toml`: ejemplo opcional de configuracion. En Cloudflare Pages con GitHub, configura D1 y variables desde el dashboard.
 
 ## Deploy En Cloudflare
 
@@ -34,7 +34,7 @@ Sitio y marketplace task-to-earn para TASKTIP (TASK) en OOGChain.
    wrangler d1 create tasktip_marketplace
    ```
 
-4. Copiar el `database_id` que devuelve Cloudflare y reemplazarlo en `wrangler.toml`.
+4. Copiar el `database_id` que devuelve Cloudflare si luego quieres usar Wrangler localmente. Para Pages con GitHub no hace falta subir `wrangler.toml`.
 
 5. Crear tablas:
    ```bash
