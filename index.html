@@ -195,6 +195,68 @@
         color: var(--text);
       }
 
+      .swap-cta {
+        position: relative;
+        gap: 9px;
+        border-color: rgba(255, 209, 102, 0.42);
+        background:
+          linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(55, 217, 155, 0.14)),
+          rgba(255, 255, 255, 0.055);
+        color: var(--text);
+        box-shadow: 0 14px 34px rgba(55, 217, 155, 0.12);
+      }
+
+      .swap-cta:hover {
+        border-color: rgba(153, 242, 79, 0.72);
+        transform: translateY(-1px);
+      }
+
+      .swap-mark {
+        display: inline-grid;
+        width: 28px;
+        height: 28px;
+        place-items: center;
+        border: 1px solid rgba(7, 16, 11, 0.22);
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--gold), var(--green));
+        color: var(--ink);
+        font-size: 1rem;
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .swap-logo {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .swap-promo {
+        display: grid;
+        gap: 10px;
+        border: 1px solid rgba(153, 242, 79, 0.2);
+        border-radius: 8px;
+        padding: 14px;
+        background:
+          linear-gradient(135deg, rgba(153, 242, 79, 0.12), rgba(127, 200, 255, 0.08)),
+          rgba(8, 16, 13, 0.82);
+      }
+
+      .swap-promo strong {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.02rem;
+      }
+
+      .swap-promo p {
+        margin-bottom: 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
       .hero {
         display: grid;
         grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
@@ -1038,6 +1100,12 @@
           <a href="#roadmap">Roadmap</a>
         </div>
         <div class="nav-actions">
+          <a
+            class="btn swap-cta"
+            href="https://caveswap.oggcoin.org/#0x4a11fBb462AeE25461c8C8c0E2663608cA7B15be"
+            target="_blank"
+            rel="noreferrer"
+          ><span class="swap-mark" aria-hidden="true"><img class="swap-logo" src="assets/caveswap-logo.png" alt="" /></span>CaveSwap</a>
           <label class="language-picker" for="languageSelect">
             <span id="languageFlag" aria-hidden="true">🇪🇸</span>
             <select id="languageSelect" aria-label="Idioma">
@@ -1071,6 +1139,12 @@
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="#marketplace">Abrir marketplace</a>
+            <a
+              class="btn swap-cta"
+              href="https://caveswap.oggcoin.org/#0x4a11fBb462AeE25461c8C8c0E2663608cA7B15be"
+              target="_blank"
+              rel="noreferrer"
+            ><span class="swap-mark" aria-hidden="true"><img class="swap-logo" src="assets/caveswap-logo.png" alt="" /></span>Comprar / vender TASK</a>
             <a class="btn secondary" href="#bots">Ver bots</a>
             <button class="btn secondary" id="copyHero" type="button">Copiar contrato</button>
           </div>
@@ -1115,6 +1189,16 @@
             target="_blank"
             rel="noreferrer"
           >Ver token en Block Explorer</a>
+          <div class="swap-promo">
+            <strong><span class="swap-mark" aria-hidden="true"><img class="swap-logo" src="assets/caveswap-logo.png" alt="" /></span>Compra y vende TASK en CaveSwap</strong>
+            <p>Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.</p>
+            <a
+              class="btn swap-cta"
+              href="https://caveswap.oggcoin.org/#0x4a11fBb462AeE25461c8C8c0E2663608cA7B15be"
+              target="_blank"
+              rel="noreferrer"
+            >Abrir swap oficial</a>
+          </div>
         </aside>
       </div>
 
@@ -1622,6 +1706,7 @@
             "Tokenomics": "Tokenomics",
             "Roadmap": "Roadmap",
             "Explorer": "Explorer",
+            "Comprar / vender TASK": "Buy / sell TASK",
             "TASK-to-Earn en OOGChain": "TASK-to-Earn on OOGChain",
             "Gana TASK completando servicios reales.": "Earn TASK by completing real services.",
             "TASKTIP (TASK) conecta usuarios que necesitan tareas con personas que ofrecen servicios. Publica pedidos, ofrece habilidades, acuerda recompensas y usa TASK como incentivo dentro de un marketplace de trabajo comunitario.": "TASKTIP (TASK) connects users who need tasks with people offering services. Post requests, offer skills, agree on rewards and use TASK as an incentive inside a community work marketplace.",
@@ -1636,6 +1721,9 @@
             "Red": "Network",
             "Contrato": "Contract",
             "Ver token en Block Explorer": "View token on Block Explorer",
+            "Compra y vende TASK en CaveSwap": "Buy and sell TASK on CaveSwap",
+            "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "Official OOGChain swap with direct access to the TASKTIP contract.",
+            "Abrir swap oficial": "Open official swap",
             "Detalles del token": "Token details",
             "TASKTIP se presenta como una capa de incentivos para tareas, propinas y servicios dentro de OOGChain.": "TASKTIP is presented as an incentive layer for tasks, tips and services inside OOGChain.",
             "Qué es TASKTIP": "What TASKTIP is",
@@ -1725,8 +1813,12 @@
             "TASK-to-Earn en OOGChain": "TASK-to-Earn na OOGChain",
             "Gana TASK completando servicios reales.": "Ganhe TASK completando serviços reais.",
             "Abrir marketplace": "Abrir marketplace",
+            "Comprar / vender TASK": "Comprar / vender TASK",
             "Ver bots": "Ver bots",
             "Copiar contrato": "Copiar contrato",
+            "Compra y vende TASK en CaveSwap": "Compre e venda TASK na CaveSwap",
+            "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "Swap oficial da OOGChain com acesso direto ao contrato TASKTIP.",
+            "Abrir swap oficial": "Abrir swap oficial",
             "Registro y pagos": "Registro e pagamentos",
             "No multicuentas": "Sem multicontas",
             "Mínimo 10 TASK": "Mínimo 10 TASK",
@@ -1756,8 +1848,12 @@
             "Reglas": "Правила",
             "Gana TASK completando servicios reales.": "Зарабатывайте TASK, выполняя реальные услуги.",
             "Abrir marketplace": "Открыть маркетплейс",
+            "Comprar / vender TASK": "Купить / продать TASK",
             "Ver bots": "Боты",
             "Copiar contrato": "Копировать контракт",
+            "Compra y vende TASK en CaveSwap": "Покупайте и продавайте TASK на CaveSwap",
+            "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "Официальный swap OOGChain с прямым доступом к контракту TASKTIP.",
+            "Abrir swap oficial": "Открыть официальный swap",
             "Registro y pagos": "Регистрация и выплаты",
             "No multicuentas": "Без мультиаккаунтов",
             "Mínimo 10 TASK": "Минимум 10 TASK",
@@ -1786,8 +1882,12 @@
             "Reglas": "规则",
             "Gana TASK completando servicios reales.": "完成真实服务赚取 TASK。",
             "Abrir marketplace": "打开市场",
+            "Comprar / vender TASK": "买入 / 卖出 TASK",
             "Ver bots": "查看机器人",
             "Copiar contrato": "复制合约",
+            "Compra y vende TASK en CaveSwap": "在 CaveSwap 买卖 TASK",
+            "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "OOGChain 官方兑换入口，直达 TASKTIP 合约。",
+            "Abrir swap oficial": "打开官方兑换",
             "Registro y pagos": "注册与支付",
             "No multicuentas": "禁止多账号",
             "Mínimo 10 TASK": "最低 10 TASK",
@@ -1816,8 +1916,12 @@
             "Reglas": "ルール",
             "Gana TASK completando servicios reales.": "実際のサービスを完了して TASK を獲得。",
             "Abrir marketplace": "マーケットを開く",
+            "Comprar / vender TASK": "TASK を売買",
             "Ver bots": "ボットを見る",
             "Copiar contrato": "コントラクトをコピー",
+            "Compra y vende TASK en CaveSwap": "CaveSwapでTASKを売買",
+            "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "TASKTIPコントラクトへ直接アクセスできるOOGChain公式swapです。",
+            "Abrir swap oficial": "公式swapを開く",
             "Registro y pagos": "登録と支払い",
             "No multicuentas": "複数アカウント禁止",
             "Mínimo 10 TASK": "最低 10 TASK",
