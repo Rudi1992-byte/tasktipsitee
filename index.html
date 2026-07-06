@@ -458,13 +458,13 @@
         margin-top: 14px;
       }
 
-      .bot-grid {
+      .terminal-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
       }
 
-      .bot-card {
+      .terminal-card {
         display: grid;
         grid-template-columns: 76px minmax(0, 1fr);
         gap: 14px;
@@ -476,7 +476,7 @@
         box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
       }
 
-      .bot-icon {
+      .terminal-icon {
         display: grid;
         width: 76px;
         height: 76px;
@@ -489,20 +489,44 @@
         box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.18);
       }
 
-      .bot-card h3 {
+      .terminal-card h3 {
         margin-bottom: 8px;
       }
 
-      .bot-card p {
+      .terminal-card p {
         margin-bottom: 12px;
         color: var(--muted);
         line-height: 1.55;
       }
 
-      .bot-actions {
+      .terminal-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
+      }
+
+      .terminal-list {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .terminal-item {
+        border: 1px solid rgba(153, 242, 79, 0.16);
+        border-radius: 8px;
+        padding: 13px;
+        background: rgba(153, 242, 79, 0.06);
+      }
+
+      .terminal-item strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--green);
+      }
+
+      .terminal-item span {
+        color: var(--muted);
+        line-height: 1.45;
       }
 
       .verify-grid {
@@ -1003,7 +1027,7 @@
         }
 
         .feature-grid,
-        .bot-grid,
+        .terminal-grid,
         .verify-grid,
         .flow,
         .balance-cards,
@@ -1042,8 +1066,8 @@
 
         .stat-grid,
         .feature-grid,
-        .bot-grid,
-        .bot-card,
+        .terminal-grid,
+        .terminal-card,
         .verify-grid,
         .flow,
         .toolbar,
@@ -1091,7 +1115,7 @@
         </a>
         <div class="links">
           <a href="#detalles">Detalles</a>
-          <a href="#bots">Bots</a>
+          <a href="#terminal">Terminal</a>
           <a href="#verificacion">Verificación</a>
           <a href="#reglas">Reglas</a>
           <a href="#marketplace">Marketplace</a>
@@ -1145,7 +1169,7 @@
               target="_blank"
               rel="noreferrer"
             ><span class="swap-mark" aria-hidden="true"><img class="swap-logo" src="assets/caveswap-logo.png" alt="" /></span>Comprar / vender TASK</a>
-            <a class="btn secondary" href="#bots">Ver bots</a>
+            <a class="btn secondary" href="#terminal">Abrir terminal</a>
             <button class="btn secondary" id="copyHero" type="button">Copiar contrato</button>
           </div>
         </div>
@@ -1267,46 +1291,61 @@
         </div>
       </section>
 
-      <section id="bots">
+      <section id="terminal">
         <div class="shell">
           <div class="section-head">
-            <h2>Bots de Telegram</h2>
+            <h2>Terminal CaveSwap y Faucet TASK</h2>
             <p>
-              Herramientas directas para activar la comunidad: faucet para nuevos usuarios y
-              propinas/rain para recompensar participación dentro de grupos.
+              Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet
+              para que nuevos usuarios puedan probar TASK dentro del ecosistema.
             </p>
           </div>
-          <div class="bot-grid">
-            <article class="bot-card">
-              <div class="bot-icon">F</div>
+          <div class="terminal-grid">
+            <article class="terminal-card">
+              <div class="terminal-icon">C</div>
+              <div>
+                <h3>Explora nuevos tokens</h3>
+                <p>
+                  La terminal muestra los tokens listados en CaveSwap, con foco en los proyectos
+                  agregados recientemente para que la comunidad pueda revisar oportunidades,
+                  contratos y movimiento del mercado desde un solo lugar.
+                </p>
+                <div class="terminal-actions">
+                  <a class="btn primary" href="https://terminal.tasktip.xyz/" target="_blank" rel="noreferrer">
+                    Abrir terminal
+                  </a>
+                </div>
+              </div>
+            </article>
+            <article class="terminal-card">
+              <div class="terminal-icon">F</div>
               <div>
                 <h3>Faucet TASK</h3>
                 <p>
-                  @Faucettaskbot permite que usuarios reclamen TASK para probar el ecosistema,
-                  entrar al marketplace y empezar a participar sin fricción.
+                  @Faucettaskbot permite que nuevos usuarios reclamen TASK para probar el
+                  ecosistema, entrar al marketplace y empezar a participar sin fricción.
                 </p>
-                <div class="bot-actions">
+                <div class="terminal-actions">
                   <a class="btn primary" href="https://t.me/Faucettaskbot" target="_blank" rel="noreferrer">
                     Abrir faucet
                   </a>
                 </div>
               </div>
             </article>
-            <article class="bot-card">
-              <div class="bot-icon">T</div>
-              <div>
-                <h3>Tip / Rain Bot</h3>
-                <p>
-                  @ttasktipbot puede agregarse como administrador en chats de Telegram para enviar
-                  tips, hacer rain y repartir TASK como recompensa a usuarios activos.
-                </p>
-                <div class="bot-actions">
-                  <a class="btn primary" href="https://t.me/ttasktipbot" target="_blank" rel="noreferrer">
-                    Abrir tip/rain
-                  </a>
-                </div>
+            <div class="terminal-list" aria-label="Beneficios de la terminal">
+              <div class="terminal-item">
+                <strong>Últimos agregados</strong>
+                <span>Consulta de forma rápida qué tokens nuevos aparecen en CaveSwap.</span>
               </div>
-            </article>
+              <div class="terminal-item">
+                <strong>Seguimiento del ecosistema</strong>
+                <span>Ideal para descubrir proyectos, comparar datos y mantener TASKTIP conectado al mercado.</span>
+              </div>
+              <div class="terminal-item">
+                <strong>Acceso directo</strong>
+                <span>Abre la terminal oficial desde el sitio sin buscar enlaces externos.</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1316,8 +1355,8 @@
           <div class="section-head">
             <h2>Verificación automática</h2>
             <p>
-              TASKTIP puede enfocarse en tareas medibles: si la acción se puede comprobar por bot,
-              API o transacción, el sistema puede liberar TASK sin discusión manual.
+              TASKTIP puede enfocarse en tareas medibles: si la acción se puede comprobar por
+              sistema, API o transacción, el sistema puede liberar TASK sin discusión manual.
             </p>
           </div>
           <div class="verify-grid">
@@ -1327,7 +1366,7 @@
             </article>
             <article class="verify-card">
               <strong>Telegram</strong>
-              <p>Confirmar unión a grupo, actividad mínima o uso del bot de tip/rain.</p>
+              <p>Confirmar unión a grupo, actividad mínima o participación comunitaria.</p>
             </article>
             <article class="verify-card">
               <strong>Publicar link</strong>
@@ -1349,7 +1388,7 @@
             </div>
             <div class="flow-step">
               <span>02</span>
-              Bot o backend revisa la prueba.
+              Sistema o backend revisa la prueba.
             </div>
             <div class="flow-step">
               <span>03</span>
@@ -1577,7 +1616,7 @@
               </form>
               <p class="lead" style="font-size: 0.96rem; margin-top: 14px;">
                 Al marcar una prueba como pagada, se guarda monto, hash y fecha. Si configuras el
-                bot de Telegram, el aviso de pago se envía automáticamente.
+                notificador de Telegram, el aviso de pago se envía automáticamente.
               </p>
             </article>
             <article class="panel">
@@ -1699,7 +1738,7 @@
         const dictionaries = {
           en: {
             "Detalles": "Details",
-            "Bots": "Bots",
+            "Terminal": "Terminal",
             "Verificación": "Verification",
             "Reglas": "Rules",
             "Marketplace": "Marketplace",
@@ -1711,7 +1750,7 @@
             "Gana TASK completando servicios reales.": "Earn TASK by completing real services.",
             "TASKTIP (TASK) conecta usuarios que necesitan tareas con personas que ofrecen servicios. Publica pedidos, ofrece habilidades, acuerda recompensas y usa TASK como incentivo dentro de un marketplace de trabajo comunitario.": "TASKTIP (TASK) connects users who need tasks with people offering services. Post requests, offer skills, agree on rewards and use TASK as an incentive inside a community work marketplace.",
             "Abrir marketplace": "Open marketplace",
-            "Ver bots": "View bots",
+            "Abrir terminal": "Open terminal",
             "Copiar contrato": "Copy contract",
             "Copiado": "Copied",
             "Copia manual": "Copy manually",
@@ -1735,18 +1774,23 @@
             "Tips en TASK": "TASK tips",
             "Ficha técnica": "Token facts",
             "Nombre": "Name",
-            "Bots de Telegram": "Telegram bots",
-            "Herramientas directas para activar la comunidad: faucet para nuevos usuarios y propinas/rain para recompensar participación dentro de grupos.": "Direct tools to activate the community: faucet for new users and tips/rain to reward participation inside groups.",
+            "Terminal CaveSwap y Faucet TASK": "CaveSwap Terminal and TASK Faucet",
+            "Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet para que nuevos usuarios puedan probar TASK dentro del ecosistema.": "Follow CaveSwap tokens, spot the latest additions and keep the faucet so new users can try TASK inside the ecosystem.",
+            "Explora nuevos tokens": "Explore new tokens",
+            "La terminal muestra los tokens listados en CaveSwap, con foco en los proyectos agregados recientemente para que la comunidad pueda revisar oportunidades, contratos y movimiento del mercado desde un solo lugar.": "The terminal shows tokens listed on CaveSwap, focused on recently added projects so the community can review opportunities, contracts and market movement from one place.",
             "Faucet TASK": "TASK Faucet",
-            "@Faucettaskbot permite que usuarios reclamen TASK para probar el ecosistema, entrar al marketplace y empezar a participar sin fricción.": "@Faucettaskbot lets users claim TASK to try the ecosystem, enter the marketplace and start participating smoothly.",
+            "@Faucettaskbot permite que nuevos usuarios reclamen TASK para probar el ecosistema, entrar al marketplace y empezar a participar sin fricción.": "@Faucettaskbot lets new users claim TASK to try the ecosystem, enter the marketplace and start participating smoothly.",
             "Abrir faucet": "Open faucet",
-            "Tip / Rain Bot": "Tip / Rain Bot",
-            "@ttasktipbot puede agregarse como administrador en chats de Telegram para enviar tips, hacer rain y repartir TASK como recompensa a usuarios activos.": "@ttasktipbot can be added as admin in Telegram chats to send tips, run rain and distribute TASK as rewards to active users.",
-            "Abrir tip/rain": "Open tip/rain",
+            "Últimos agregados": "Latest additions",
+            "Consulta de forma rápida qué tokens nuevos aparecen en CaveSwap.": "Quickly check which new tokens appear on CaveSwap.",
+            "Seguimiento del ecosistema": "Ecosystem tracking",
+            "Ideal para descubrir proyectos, comparar datos y mantener TASKTIP conectado al mercado.": "Ideal for discovering projects, comparing data and keeping TASKTIP connected to the market.",
+            "Acceso directo": "Direct access",
+            "Abre la terminal oficial desde el sitio sin buscar enlaces externos.": "Open the official terminal from the site without hunting for external links.",
             "Verificación automática": "Automatic verification",
-            "TASKTIP puede enfocarse en tareas medibles: si la acción se puede comprobar por bot, API o transacción, el sistema puede liberar TASK sin discusión manual.": "TASKTIP can focus on measurable tasks: if an action can be checked by bot, API or transaction, the system can approve TASK without manual dispute.",
+            "TASKTIP puede enfocarse en tareas medibles: si la acción se puede comprobar por sistema, API o transacción, el sistema puede liberar TASK sin discusión manual.": "TASKTIP can focus on measurable tasks: if an action can be checked by system, API or transaction, the system can approve TASK without manual dispute.",
             "Verificar follow, like, repost o publicación de un enlace específico.": "Verify follow, like, repost or posting a specific link.",
-            "Confirmar unión a grupo, actividad mínima o uso del bot de tip/rain.": "Confirm group joining, minimum activity or use of the tip/rain bot.",
+            "Confirmar unión a grupo, actividad mínima o participación comunitaria.": "Confirm group joining, minimum activity or community participation.",
             "Publicar link": "Post link",
             "Comprobar que el usuario compartió una URL válida como prueba.": "Check that the user shared a valid URL as proof.",
             "Formulario": "Form",
@@ -1754,7 +1798,7 @@
             "Transacción": "Transaction",
             "Leer OOGChain para verificar transferencias, holders o actividad on-chain.": "Read OOGChain to verify transfers, holders or on-chain activity.",
             "Usuario toma una tarea verificable.": "The user takes a verifiable task.",
-            "Bot o backend revisa la prueba.": "Bot or backend checks the proof.",
+            "Sistema o backend revisa la prueba.": "System or backend checks the proof.",
             "Si cumple, marca la tarea como válida.": "If it matches, the task is marked valid.",
             "El admin revisa y paga TASK manualmente.": "The admin reviews and pays TASK manually.",
             "Registro y pagos": "Registration and payments",
@@ -1814,7 +1858,20 @@
             "Gana TASK completando servicios reales.": "Ganhe TASK completando serviços reais.",
             "Abrir marketplace": "Abrir marketplace",
             "Comprar / vender TASK": "Comprar / vender TASK",
-            "Ver bots": "Ver bots",
+            "Abrir terminal": "Abrir terminal",
+            "Terminal CaveSwap y Faucet TASK": "Terminal CaveSwap e Faucet TASK",
+            "Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet para que nuevos usuarios puedan probar TASK dentro del ecosistema.": "Acompanhe os tokens da CaveSwap, detecte os últimos adicionados e mantenha o faucet para novos usuários testarem TASK no ecossistema.",
+            "Explora nuevos tokens": "Explore novos tokens",
+            "La terminal muestra los tokens listados en CaveSwap, con foco en los proyectos agregados recientemente para que la comunidad pueda revisar oportunidades, contratos y movimiento del mercado desde un solo lugar.": "O terminal mostra os tokens listados na CaveSwap, com foco nos projetos adicionados recentemente para a comunidade revisar oportunidades, contratos e movimento do mercado em um só lugar.",
+            "Faucet TASK": "Faucet TASK",
+            "@Faucettaskbot permite que nuevos usuarios reclamen TASK para probar el ecosistema, entrar al marketplace y empezar a participar sin fricción.": "@Faucettaskbot permite que novos usuários reivindiquem TASK para testar o ecossistema, entrar no marketplace e começar a participar sem fricção.",
+            "Abrir faucet": "Abrir faucet",
+            "Últimos agregados": "Últimos adicionados",
+            "Consulta de forma rápida qué tokens nuevos aparecen en CaveSwap.": "Veja rapidamente quais novos tokens aparecem na CaveSwap.",
+            "Seguimiento del ecosistema": "Acompanhamento do ecossistema",
+            "Ideal para descubrir proyectos, comparar datos y mantener TASKTIP conectado al mercado.": "Ideal para descobrir projetos, comparar dados e manter TASKTIP conectado ao mercado.",
+            "Acceso directo": "Acesso direto",
+            "Abre la terminal oficial desde el sitio sin buscar enlaces externos.": "Abra o terminal oficial pelo site sem procurar links externos.",
             "Copiar contrato": "Copiar contrato",
             "Compra y vende TASK en CaveSwap": "Compre e venda TASK na CaveSwap",
             "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "Swap oficial da OOGChain com acesso direto ao contrato TASKTIP.",
@@ -1849,7 +1906,11 @@
             "Gana TASK completando servicios reales.": "Зарабатывайте TASK, выполняя реальные услуги.",
             "Abrir marketplace": "Открыть маркетплейс",
             "Comprar / vender TASK": "Купить / продать TASK",
-            "Ver bots": "Боты",
+            "Abrir terminal": "Открыть терминал",
+            "Terminal CaveSwap y Faucet TASK": "Терминал CaveSwap и Faucet TASK",
+            "Explora nuevos tokens": "Изучайте новые токены",
+            "Faucet TASK": "Faucet TASK",
+            "Abrir faucet": "Открыть faucet",
             "Copiar contrato": "Копировать контракт",
             "Compra y vende TASK en CaveSwap": "Покупайте и продавайте TASK на CaveSwap",
             "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "Официальный swap OOGChain с прямым доступом к контракту TASKTIP.",
@@ -1883,7 +1944,11 @@
             "Gana TASK completando servicios reales.": "完成真实服务赚取 TASK。",
             "Abrir marketplace": "打开市场",
             "Comprar / vender TASK": "买入 / 卖出 TASK",
-            "Ver bots": "查看机器人",
+            "Abrir terminal": "打开终端",
+            "Terminal CaveSwap y Faucet TASK": "CaveSwap 终端和 TASK Faucet",
+            "Explora nuevos tokens": "探索新代币",
+            "Faucet TASK": "TASK Faucet",
+            "Abrir faucet": "打开 faucet",
             "Copiar contrato": "复制合约",
             "Compra y vende TASK en CaveSwap": "在 CaveSwap 买卖 TASK",
             "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "OOGChain 官方兑换入口，直达 TASKTIP 合约。",
@@ -1917,7 +1982,11 @@
             "Gana TASK completando servicios reales.": "実際のサービスを完了して TASK を獲得。",
             "Abrir marketplace": "マーケットを開く",
             "Comprar / vender TASK": "TASK を売買",
-            "Ver bots": "ボットを見る",
+            "Abrir terminal": "ターミナルを開く",
+            "Terminal CaveSwap y Faucet TASK": "CaveSwapターミナルとTASK Faucet",
+            "Explora nuevos tokens": "新しいトークンを見る",
+            "Faucet TASK": "TASK Faucet",
+            "Abrir faucet": "Faucetを開く",
             "Copiar contrato": "コントラクトをコピー",
             "Compra y vende TASK en CaveSwap": "CaveSwapでTASKを売買",
             "Swap oficial de OOGChain con acceso directo al contrato de TASKTIP.": "TASKTIPコントラクトへ直接アクセスできるOOGChain公式swapです。",
