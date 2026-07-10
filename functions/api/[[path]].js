@@ -144,6 +144,8 @@ async function createTask(request, env) {
   if (!title || !description || !category) return badRequest("Missing title, description or category.");
   if (type === "request" && (!Number.isFinite(reward) || reward < 10)) return badRequest("Reward must be at least 10 TASK per person.");
   if (!ownerName) return badRequest("Advertiser name is required.");
+  if (ownerWallet && !isWallet(ownerWallet)) return badRequest("Owner wallet must be a valid 0x wallet.");
+  if (type === "offer" && !isWallet(ownerWallet)) return badRequest("Service offers require a valid payment wallet.");
   if (!isTxHash(depositTx)) return badRequest("Valid deposit transaction hash is required.");
 
   const result = await env.DB.prepare(
