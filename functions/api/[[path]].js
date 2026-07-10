@@ -200,6 +200,40 @@ async function listTasks(env) {
   return json({ tasks: result.results || [] });
 }
 
+async function getStats(env) {
+  await ensureMarketplaceSchema(env);
+  const stats = await env.DB.prepare(
+    `SELECT
+      COUNT(*) AS paid_tasks,
+      COALESCE(SUM(paid_amount), 0) AS distributed_task
+     FROM claims
+     WHERE status = 'paid'`
+  ).first();
+
+  const users = await env.DB.prepare(
+    `SELECT COUNT(*) AS active_users
+     FROM (
+       SELECT LOWER(claimant_wallet) AS user_key
+       FROM claims
+       WHERE claimant_wallet IS NOT NULL
+         AND claimant_wallet != ''
+         AND status != 'deleted'
+       UNION
+       SELECT LOWER(owner_wallet) AS user_key
+       FROM tasks
+       WHERE owner_wallet IS NOT NULL
+         AND owner_wallet != ''
+         AND status != 'deleted'
+     )`
+  ).first();
+
+  return json({
+    paid_tasks: Number(stats?.paid_tasks || 0),
+    distributed_task: Number(stats?.distributed_task || 0),
+    active_users: Number(users?.active_users || 0),
+  });
+}
+
 async function createTask(request, env) {
   await ensureMarketplaceSchema(env);
   const body = await readJson(request);
@@ -574,6 +608,7 @@ export async function onRequest(context) {
   const parts = path.split("/").filter(Boolean);
 
   try {
+    if (request.method === "GET" && path === "stats") return await getStats(env);
     if (request.method === "GET" && path === "tasks") return await listTasks(env);
     if (request.method === "POST" && path === "tasks") return await createTask(request, env);
     if (request.method === "POST" && parts[0] === "tasks" && parts[2] === "claim") {

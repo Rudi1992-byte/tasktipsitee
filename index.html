@@ -650,6 +650,42 @@
         margin-bottom: 16px;
       }
 
+      .market-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .market-stat {
+        border: 1px solid rgba(153, 242, 79, 0.16);
+        border-radius: 8px;
+        padding: 14px;
+        background: rgba(12, 20, 18, 0.8);
+      }
+
+      .market-stat span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 850;
+      }
+
+      .market-stat strong {
+        display: block;
+        margin-top: 7px;
+        color: var(--green);
+        font-size: clamp(1.32rem, 2vw, 1.9rem);
+        line-height: 1;
+      }
+
+      .market-stat small {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
       .market-copy {
         display: grid;
         align-content: center;
@@ -1119,6 +1155,7 @@
         .hero,
         .details-grid,
         .market-showcase,
+        .market-stats,
         .board,
         .account-grid {
           grid-template-columns: 1fr;
@@ -1591,6 +1628,24 @@
             </div>
           </div>
 
+          <div class="market-stats" aria-label="Estadísticas reales del marketplace">
+            <article class="market-stat">
+              <span>Tareas pagadas</span>
+              <strong id="paidTaskCount">0</strong>
+              <small>Pruebas marcadas como pagadas por el admin.</small>
+            </article>
+            <article class="market-stat">
+              <span>TASK distribuidos</span>
+              <strong id="distributedTaskCount">0 TASK</strong>
+              <small>Total real registrado en pagos del marketplace.</small>
+            </article>
+            <article class="market-stat">
+              <span>Usuarios activos</span>
+              <strong id="activeUserCount">0</strong>
+              <small>Wallets con publicaciones o pruebas enviadas.</small>
+            </article>
+          </div>
+
           <div class="board">
             <div class="panel">
               <div class="toolbar">
@@ -1987,6 +2042,12 @@
             "Servicios + rewards": "Services + rewards",
             "Un mercado donde TASK representa trabajo completado.": "A market where TASK represents completed work.",
             "La idea central es que cada publicación tenga una recompensa clara en TASK: acciones sociales, entradas a comunidad, formularios, publicaciones con link y transacciones que puedan comprobarse de forma automática.": "The core idea is that each post has a clear TASK reward: social actions, community entries, forms, link posts and transactions that can be checked automatically.",
+            "Tareas pagadas": "Paid tasks",
+            "Pruebas marcadas como pagadas por el admin.": "Proofs marked as paid by the admin.",
+            "TASK distribuidos": "TASK distributed",
+            "Total real registrado en pagos del marketplace.": "Real total registered in marketplace payments.",
+            "Usuarios activos": "Active users",
+            "Wallets con publicaciones o pruebas enviadas.": "Wallets with listings or submitted proofs.",
             "Todo": "All",
             "Pedidos": "Requests",
             "Categorías": "Categories",
@@ -2269,6 +2330,12 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "O pagamento do trabalho é combinado diretamente entre as partes; para operações sensíveis, podem pedir intermediação antes de pagar.",
             "Launch": "Lançamento",
             "Task Board": "Painel de tarefas",
+            "Tareas pagadas": "Tarefas pagas",
+            "Pruebas marcadas como pagadas por el admin.": "Provas marcadas como pagas pelo admin.",
+            "TASK distribuidos": "TASK distribuídos",
+            "Total real registrado en pagos del marketplace.": "Total real registrado em pagamentos do marketplace.",
+            "Usuarios activos": "Usuários ativos",
+            "Wallets con publicaciones o pruebas enviadas.": "Wallets com publicações ou provas enviadas.",
             "Mi panel TASKTIP": "Meu painel TASKTIP",
             "Cada usuario puede consultar su balance por wallet: pruebas pendientes, TASK aprobado, pagos realizados y si ya alcanza el mínimo de retiro de 10 TASK.": "Cada usuário pode consultar seu saldo por wallet: provas pendentes, TASK aprovado, pagamentos realizados e se já alcançou o mínimo de saque de 10 TASK.",
             "Consultar balance": "Consultar saldo",
@@ -2344,6 +2411,12 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "Оплата работы согласуется напрямую между сторонами; для чувствительных сделок можно запросить посредничество до оплаты.",
             "Launch": "Запуск",
             "Task Board": "Доска задач",
+            "Tareas pagadas": "Оплаченные задачи",
+            "Pruebas marcadas como pagadas por el admin.": "Доказательства, отмеченные админом как оплаченные.",
+            "TASK distribuidos": "Распределено TASK",
+            "Total real registrado en pagos del marketplace.": "Реальная сумма, зарегистрированная в выплатах маркетплейса.",
+            "Usuarios activos": "Активные пользователи",
+            "Wallets con publicaciones o pruebas enviadas.": "Wallet с публикациями или отправленными доказательствами.",
             "Mi panel TASKTIP": "Моя панель TASKTIP",
             "Cada usuario puede consultar su balance por wallet: pruebas pendientes, TASK aprobado, pagos realizados y si ya alcanza el mínimo de retiro de 10 TASK.": "Каждый пользователь может проверить баланс по wallet: ожидающие доказательства, одобренные TASK, выполненные выплаты и достижение минимума вывода 10 TASK.",
             "Consultar balance": "Проверить баланс",
@@ -2419,6 +2492,12 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "工作付款由双方直接协商；对于敏感交易，可在付款前请求中介服务。",
             "Launch": "上线",
             "Task Board": "任务面板",
+            "Tareas pagadas": "已支付任务",
+            "Pruebas marcadas como pagadas por el admin.": "管理员标记为已支付的证明。",
+            "TASK distribuidos": "已分发 TASK",
+            "Total real registrado en pagos del marketplace.": "市场付款中记录的真实总额。",
+            "Usuarios activos": "活跃用户",
+            "Wallets con publicaciones o pruebas enviadas.": "发布任务或提交证明的 wallet。",
             "Mi panel TASKTIP": "我的 TASKTIP 面板",
             "Cada usuario puede consultar su balance por wallet: pruebas pendientes, TASK aprobado, pagos realizados y si ya alcanza el mínimo de retiro de 10 TASK.": "每个用户都可以按 wallet 查看余额：待处理证明、已批准 TASK、已支付记录，以及是否达到 10 TASK 最低提现额。",
             "Consultar balance": "查询余额",
@@ -2494,6 +2573,12 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "作業の支払いは当事者間で直接合意します。慎重な取引では、支払い前に仲介を依頼できます。",
             "Launch": "ローンチ",
             "Task Board": "タスクボード",
+            "Tareas pagadas": "支払い済みタスク",
+            "Pruebas marcadas como pagadas por el admin.": "管理者が支払い済みにした証明。",
+            "TASK distribuidos": "配布済みTASK",
+            "Total real registrado en pagos del marketplace.": "マーケットプレイスの支払いに記録された実際の合計。",
+            "Usuarios activos": "アクティブユーザー",
+            "Wallets con publicaciones o pruebas enviadas.": "投稿または証明送信のあるwallet。",
             "Mi panel TASKTIP": "マイTASKTIPパネル",
             "Cada usuario puede consultar su balance por wallet: pruebas pendientes, TASK aprobado, pagos realizados y si ya alcanza el mínimo de retiro de 10 TASK.": "各ユーザーはwalletごとに、保留中の証明、承認済みTASK、支払い履歴、10 TASKの最低出金額に達したかを確認できます。",
             "Consultar balance": "残高を確認",
@@ -3220,6 +3305,19 @@
           renderListings();
         }
 
+        async function loadMarketplaceStats() {
+          try {
+            const stats = await requestApi("/stats");
+            $("#paidTaskCount").textContent = numberFormat.format(stats.paid_tasks || 0);
+            $("#distributedTaskCount").textContent = `${numberFormat.format(stats.distributed_task || 0)} TASK`;
+            $("#activeUserCount").textContent = numberFormat.format(stats.active_users || 0);
+          } catch {
+            $("#paidTaskCount").textContent = "0";
+            $("#distributedTaskCount").textContent = "0 TASK";
+            $("#activeUserCount").textContent = "0";
+          }
+        }
+
         function renderListings() {
           const board = $("#listingBoard");
           const search = $("#searchInput").value.trim().toLowerCase();
@@ -3324,6 +3422,7 @@
             button.textContent = result.status === "verified" ? getText("received") : getText("review");
             alert(result.note || getText("proofSent"));
             await loadListings();
+            await loadMarketplaceStats();
           } catch (error) {
             button.textContent = getText("error");
             alert(error.message);
@@ -3403,6 +3502,7 @@
             $("#listingParticipants").value = 1;
             updateDepositTotal();
             await loadListings();
+            await loadMarketplaceStats();
             setListingStatus(getText("listingCreated"), true);
             alert(getText("taskPostedPending"));
           } catch (error) {
@@ -3712,6 +3812,7 @@
             });
             button.textContent = getText("statusPaid");
             await loadAdminClaims();
+            await loadMarketplaceStats();
           } catch (error) {
             button.textContent = "Error";
             alert(error.message);
@@ -3738,6 +3839,7 @@
         applyLanguage(currentLanguage);
         updateDepositTotal();
         loadListings();
+        loadMarketplaceStats();
       })();
     </script>
   </body>
