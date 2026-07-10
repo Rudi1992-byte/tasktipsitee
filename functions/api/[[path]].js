@@ -93,7 +93,7 @@ function requireAdmin(request, env) {
 async function ensureMarketplaceSchema(env) {
   if (marketplaceSchemaReady) return;
   try {
-    await env.DB.prepare("ALTER TABLE tasks ADD COLUMN participant_limit INTEGER NOT NULL DEFAULT 1").run();
+    await env.DB.prepare("ALTER TABLE tasks ADD COLUMN participant_limit INTEGER DEFAULT 1").run();
   } catch {
   }
   marketplaceSchemaReady = true;
@@ -490,36 +490,36 @@ export async function onRequest(context) {
   const parts = path.split("/").filter(Boolean);
 
   try {
-    if (request.method === "GET" && path === "tasks") return listTasks(env);
-    if (request.method === "POST" && path === "tasks") return createTask(request, env);
+    if (request.method === "GET" && path === "tasks") return await listTasks(env);
+    if (request.method === "POST" && path === "tasks") return await createTask(request, env);
     if (request.method === "POST" && parts[0] === "tasks" && parts[2] === "claim") {
-      return claimTask(request, env, Number(parts[1]));
+      return await claimTask(request, env, Number(parts[1]));
     }
     if (request.method === "GET" && path === "claims") {
-      return listClaims(env, url.searchParams.get("wallet"));
+      return await listClaims(env, url.searchParams.get("wallet"));
     }
     if (request.method === "GET" && path === "balance") {
-      return getBalance(env, url.searchParams.get("wallet"));
+      return await getBalance(env, url.searchParams.get("wallet"));
     }
-    if (request.method === "GET" && path === "admin/claims") return listAdminClaims(request, env);
-    if (request.method === "GET" && path === "admin/tasks") return listAdminTasks(request, env);
+    if (request.method === "GET" && path === "admin/claims") return await listAdminClaims(request, env);
+    if (request.method === "GET" && path === "admin/tasks") return await listAdminTasks(request, env);
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "tasks" && parts[3] === "approve") {
-      return approveTaskDeposit(request, env, Number(parts[2]));
+      return await approveTaskDeposit(request, env, Number(parts[2]));
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "tasks" && parts[3] === "delete") {
-      return deleteTask(request, env, Number(parts[2]));
+      return await deleteTask(request, env, Number(parts[2]));
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "verify") {
-      return updateClaimStatus(request, env, Number(parts[2]), "verified");
+      return await updateClaimStatus(request, env, Number(parts[2]), "verified");
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "reject") {
-      return updateClaimStatus(request, env, Number(parts[2]), "rejected");
+      return await updateClaimStatus(request, env, Number(parts[2]), "rejected");
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "delete") {
-      return deleteClaim(request, env, Number(parts[2]));
+      return await deleteClaim(request, env, Number(parts[2]));
     }
     if (request.method === "POST" && parts[0] === "admin" && parts[1] === "claims" && parts[3] === "pay") {
-      return markClaimPaid(request, env, Number(parts[2]));
+      return await markClaimPaid(request, env, Number(parts[2]));
     }
 
     return json({ error: "Route not found." }, 404);
