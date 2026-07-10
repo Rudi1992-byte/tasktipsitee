@@ -3281,6 +3281,7 @@
         async function createListing(event) {
           event.preventDefault();
           event.stopImmediatePropagation();
+          const form = event.currentTarget;
           setListingStatus("");
           if (!app.apiOnline) {
             alert(getText("dbBeforePost"));
@@ -3344,7 +3345,7 @@
 
           try {
             await requestApi("/tasks", { method: "POST", body: JSON.stringify(listing) });
-            event.currentTarget.reset();
+            form.reset();
             $("#listingReward").value = 250;
             $("#listingParticipants").value = 1;
             updateDepositTotal();
