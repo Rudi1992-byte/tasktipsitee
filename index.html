@@ -2390,6 +2390,7 @@
           es: {
             loading: "Cargando tareas reales...",
             connectDb: "Conecta Cloudflare D1 para cargar tareas reales.",
+            invalidWallet: "La wallet debe empezar con 0x y tener 40 caracteres hexadecimales.",
             noTasks: "Todavia no hay tareas reales publicadas.",
             service: "Servicio",
             task: "Tarea",
@@ -2468,6 +2469,7 @@
           en: {
             loading: "Loading real tasks...",
             connectDb: "Connect Cloudflare D1 to load real tasks.",
+            invalidWallet: "The wallet must start with 0x and have 40 hexadecimal characters.",
             noTasks: "No real tasks have been published yet.",
             service: "Service",
             task: "Task",
@@ -2548,6 +2550,7 @@
           pt: {
             loading: "Carregando tarefas reais...",
             connectDb: "Conecte o Cloudflare D1 para carregar tarefas reais.",
+            invalidWallet: "A wallet deve começar com 0x e ter 40 caracteres hexadecimais.",
             noTasks: "Ainda não há tarefas reais publicadas.",
             service: "Serviço",
             task: "Tarefa",
@@ -2625,6 +2628,7 @@
           ru: {
             loading: "Загрузка реальных задач...",
             connectDb: "Подключите Cloudflare D1, чтобы загрузить реальные задачи.",
+            invalidWallet: "Wallet должен начинаться с 0x и содержать 40 шестнадцатеричных символов.",
             noTasks: "Реальные задачи пока не опубликованы.",
             service: "Услуга",
             task: "Задача",
@@ -2702,6 +2706,7 @@
           zh: {
             loading: "正在加载真实任务...",
             connectDb: "连接 Cloudflare D1 后可加载真实任务。",
+            invalidWallet: "wallet 必须以 0x 开头，并包含 40 个十六进制字符。",
             noTasks: "还没有发布真实任务。",
             service: "服务",
             task: "任务",
@@ -2779,6 +2784,7 @@
           ja: {
             loading: "実際のタスクを読み込み中...",
             connectDb: "実際のタスクを読み込むにはCloudflare D1を接続してください。",
+            invalidWallet: "walletは0xで始まり、40文字の16進数である必要があります。",
             noTasks: "まだ実際のタスクは公開されていません。",
             service: "サービス",
             task: "タスク",
@@ -2963,9 +2969,24 @@
             ...fetchOptions,
             headers: { "content-type": "application/json", ...headers },
           });
-          const data = await response.json().catch(() => ({}));
-          if (!response.ok) throw new Error(data.error || "API error");
+          const raw = await response.text();
+          let data = {};
+          try {
+            data = raw ? JSON.parse(raw) : {};
+          } catch {
+            data = {};
+          }
+          if (!response.ok) {
+            const message = data.detail
+              ? `${data.error || "API error"}: ${data.detail}`
+              : data.error || raw.slice(0, 160) || `API error ${response.status}`;
+            throw new Error(message);
+          }
           return data;
+        }
+
+        function isValidWallet(value) {
+          return /^0x[a-fA-F0-9]{40}$/.test(String(value || "").trim());
         }
 
         function verificationForCategory(category) {
@@ -3198,6 +3219,10 @@
 
           const wallet = $("#balanceWallet").value.trim();
           if (!wallet) return;
+          if (!isValidWallet(wallet)) {
+            $("#userClaims").innerHTML = `<div class="empty">${getText("invalidWallet")}</div>`;
+            return;
+          }
 
           const container = $("#userClaims");
           container.innerHTML = '<div class="empty">Cargando panel...</div>';
