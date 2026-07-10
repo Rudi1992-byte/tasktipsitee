@@ -268,11 +268,11 @@ async function getBalance(env, wallet) {
   const summary = await env.DB.prepare(
     `SELECT
       COUNT(*) AS total_claims,
-      SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending_claims,
-      SUM(CASE WHEN status = 'verified' THEN 1 ELSE 0 END) AS verified_claims,
-      SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END) AS paid_claims,
-      COALESCE(SUM(CASE WHEN status = 'verified' THEN tasks.reward ELSE 0 END), 0) AS available_task,
-      COALESCE(SUM(CASE WHEN status = 'paid' THEN claims.paid_amount ELSE 0 END), 0) AS paid_task
+      SUM(CASE WHEN claims.status = 'pending' THEN 1 ELSE 0 END) AS pending_claims,
+      SUM(CASE WHEN claims.status = 'verified' THEN 1 ELSE 0 END) AS verified_claims,
+      SUM(CASE WHEN claims.status = 'paid' THEN 1 ELSE 0 END) AS paid_claims,
+      COALESCE(SUM(CASE WHEN claims.status = 'verified' THEN tasks.reward ELSE 0 END), 0) AS available_task,
+      COALESCE(SUM(CASE WHEN claims.status = 'paid' THEN claims.paid_amount ELSE 0 END), 0) AS paid_task
      FROM claims
      JOIN tasks ON tasks.id = claims.task_id
      WHERE claims.claimant_wallet = ?`
