@@ -1,0 +1,4 @@
+Contact: https://x.com/TASKTIP
+Preferred-Languages: es, en
+Canonical: https://tasktip.xyz/.well-known/security.txt
+Expires: 2027-07-10T00:00:00Z
