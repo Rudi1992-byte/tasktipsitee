@@ -37,7 +37,7 @@ function isWallet(value) {
 }
 
 function isTxHash(value) {
-  return /^0x[a-fA-F0-9]{64}$/.test(String(value || "").trim());
+  return /^0x[a-fA-F0-9]{6,}$/.test(String(value || "").trim());
 }
 
 function isOptionalUrl(value) {
@@ -66,7 +66,7 @@ function verifyProof(task, proof) {
   }
 
   if (task.verification_kind === "tx") {
-    return /^0x[a-fA-F0-9]{64}$/.test(text)
+    return isTxHash(text)
       ? { status: "verified", note: "Transaction hash format accepted." }
       : { status: "pending", note: "Submit a valid transaction hash." };
   }

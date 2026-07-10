@@ -1636,7 +1636,7 @@
                   </label>
                   <label>
                     Hash del depósito
-                    <input id="depositTx" maxlength="66" placeholder="0x..." required />
+                    <input id="depositTx" maxlength="140" placeholder="0x..." required />
                   </label>
                 </div>
                 <div class="balance-card">
@@ -2522,8 +2522,8 @@
             taskPosted: "Tarea publicada. Recuerda cobrar/verificar manualmente el fee antes de activarla si aplica.",
             copied: "Copiado",
             manualCopy: "Copia manual",
-            depositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por pago por persona x cupos + 5 TASK enviada a la wallet de TASKTIP.",
-            offerDepositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por 5 TASK de fee enviada a la wallet de TASKTIP.",
+            depositHashPrompt: "Pega el hash del deposito. Debe empezar con 0x y corresponder al pago por persona x cupos + 5 TASK enviado a la wallet de TASKTIP.",
+            offerDepositHashPrompt: "Pega el hash del deposito. Debe empezar con 0x y corresponder al fee de 5 TASK enviado a la wallet de TASKTIP.",
             depositRequired: "Antes de publicar envia el deposito requerido y pega el hash.",
             taskPostedPending: "Tarea recibida. Queda pendiente hasta que el admin verifique el deposito.",
             promptChatId: "Telegram chat ID opcional para aviso directo de pago. Si no lo tienes, deja vacío.",
@@ -2606,8 +2606,8 @@
             taskPosted: "Task published. Remember to collect/verify the fee manually before activating it if needed.",
             copied: "Copied",
             manualCopy: "Copy manually",
-            depositHashPrompt: "Paste the deposit hash. It must be the transaction for payment per person x spots + 5 TASK sent to the TASKTIP wallet.",
-            offerDepositHashPrompt: "Paste the deposit hash. It must be the transaction for the 5 TASK fee sent to the TASKTIP wallet.",
+            depositHashPrompt: "Paste the deposit hash. It must start with 0x and match the payment per person x spots + 5 TASK sent to the TASKTIP wallet.",
+            offerDepositHashPrompt: "Paste the deposit hash. It must start with 0x and match the 5 TASK fee sent to the TASKTIP wallet.",
             depositRequired: "Before publishing, send the required deposit and paste the hash.",
             taskPostedPending: "Task received. It stays pending until the admin verifies the deposit.",
             promptChatId: "Optional Telegram chat ID for direct payment notice. Leave empty if you do not have it.",
@@ -2692,8 +2692,8 @@
             taskPosted: "Tarefa publicada. Lembre-se de cobrar/verificar a taxa manualmente antes de ativá-la, se necessário.",
             copied: "Copiado",
             manualCopy: "Cópia manual",
-            depositHashPrompt: "Cole o hash do depósito. Deve ser a transação de pagamento por pessoa x vagas + 5 TASK enviada à wallet TASKTIP.",
-            offerDepositHashPrompt: "Cole o hash do depósito. Deve ser a transação da taxa de 5 TASK enviada à wallet TASKTIP.",
+            depositHashPrompt: "Cole o hash do depósito. Deve começar com 0x e corresponder ao pagamento por pessoa x vagas + 5 TASK enviado à wallet TASKTIP.",
+            offerDepositHashPrompt: "Cole o hash do depósito. Deve começar com 0x e corresponder à taxa de 5 TASK enviada à wallet TASKTIP.",
             depositRequired: "Antes de publicar, envie o depósito necessário e cole o hash.",
             taskPostedPending: "Tarefa recebida. Fica pendente até o admin verificar o depósito.",
             promptChatId: "Telegram chat ID opcional para aviso direto de pagamento. Se não tiver, deixe vazio.",
@@ -2775,8 +2775,8 @@
             taskPosted: "Задача опубликована. При необходимости вручную проверьте комиссию перед активацией.",
             copied: "Скопировано",
             manualCopy: "Скопировать вручную",
-            depositHashPrompt: "Вставьте hash депозита. Это должна быть транзакция оплаты на человека x места + 5 TASK на wallet TASKTIP.",
-            offerDepositHashPrompt: "Вставьте hash депозита. Это должна быть транзакция комиссии 5 TASK на wallet TASKTIP.",
+            depositHashPrompt: "Вставьте hash депозита. Он должен начинаться с 0x и соответствовать оплате на человека x места + 5 TASK на wallet TASKTIP.",
+            offerDepositHashPrompt: "Вставьте hash депозита. Он должен начинаться с 0x и соответствовать комиссии 5 TASK на wallet TASKTIP.",
             depositRequired: "Перед публикацией отправьте необходимый депозит и вставьте hash.",
             taskPostedPending: "Задача получена. Она останется в ожидании, пока админ не проверит депозит.",
             promptChatId: "Необязательный Telegram chat ID для прямого уведомления об оплате. Если его нет, оставьте пустым.",
@@ -2858,8 +2858,8 @@
             taskPosted: "任务已发布。如需要，请在激活前手动收取/验证费用。",
             copied: "已复制",
             manualCopy: "手动复制",
-            depositHashPrompt: "粘贴押金 hash。必须是发送到 TASKTIP wallet 的每人支付 x 名额 + 5 TASK 交易。",
-            offerDepositHashPrompt: "粘贴押金 hash。必须是发送到 TASKTIP wallet 的 5 TASK 发布费交易。",
+            depositHashPrompt: "粘贴押金 hash。必须以 0x 开头，并对应发送到 TASKTIP wallet 的每人支付 x 名额 + 5 TASK。",
+            offerDepositHashPrompt: "粘贴押金 hash。必须以 0x 开头，并对应发送到 TASKTIP wallet 的 5 TASK 发布费。",
             depositRequired: "发布前请发送所需押金并粘贴 hash。",
             taskPostedPending: "任务已收到。管理员确认押金前将保持待审核。",
             promptChatId: "可选 Telegram chat ID，用于直接付款通知。没有的话请留空。",
@@ -2941,8 +2941,8 @@
             taskPosted: "タスクを公開しました。必要に応じて有効化前に手数料を手動で確認してください。",
             copied: "コピー済み",
             manualCopy: "手動コピー",
-            depositHashPrompt: "デポジットhashを貼り付けます。TASKTIP walletへ送られた1人あたり支払い x 枠数 + 5 TASKの取引である必要があります。",
-            offerDepositHashPrompt: "デポジットhashを貼り付けます。TASKTIP walletへ送られた5 TASK掲載料の取引である必要があります。",
+            depositHashPrompt: "デポジットhashを貼り付けます。0xで始まり、TASKTIP walletへ送られた1人あたり支払い x 枠数 + 5 TASKに対応する必要があります。",
+            offerDepositHashPrompt: "デポジットhashを貼り付けます。0xで始まり、TASKTIP walletへ送られた5 TASK掲載料に対応する必要があります。",
             depositRequired: "公開前に必要なデポジットを送信し、hashを貼り付けてください。",
             taskPostedPending: "タスクを受け付けました。管理者がデポジットを確認するまで保留になります。",
             promptChatId: "支払い通知用の任意Telegram chat ID。ない場合は空欄にしてください。",
@@ -3309,7 +3309,7 @@
             setListingStatus(getText("offerWalletRequired"));
             return;
           }
-          if (!/^0x[a-fA-F0-9]{64}$/.test(depositTx)) {
+          if (!/^0x[a-fA-F0-9]{6,}$/.test(depositTx)) {
             alert(getText("depositHashPrompt"));
             setListingStatus(getText("depositHashPrompt"));
             return;
