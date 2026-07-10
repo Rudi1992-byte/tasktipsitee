@@ -900,6 +900,31 @@
         gap: 10px;
       }
 
+      .admin-task-group {
+        display: grid;
+        gap: 10px;
+        padding-top: 4px;
+      }
+
+      .admin-task-group + .admin-task-group {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .admin-task-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .admin-task-heading h4 {
+        margin: 0;
+        color: var(--soft);
+        font-size: 0.98rem;
+      }
+
       .claim-row,
       .admin-row {
         display: grid;
@@ -908,6 +933,11 @@
         border-radius: 8px;
         padding: 14px;
         background: rgba(16, 24, 22, 0.92);
+      }
+
+      .admin-row.is-approved {
+        border-color: rgba(94, 255, 168, 0.16);
+        background: rgba(12, 20, 18, 0.72);
       }
 
       .claim-row header,
@@ -935,6 +965,11 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
+      }
+
+      .admin-actions button:disabled {
+        cursor: default;
+        opacity: 0.64;
       }
 
       .danger {
@@ -2548,6 +2583,9 @@
             depositWallet: "Wallet depósito",
             depositHash: "Hash depósito",
             noHash: "Sin hash",
+            pendingTasksAdmin: "Tareas pendientes de aprobar",
+            approvedTasksAdmin: "Tareas aprobadas",
+            noTasksInGroup: "No hay tareas en este grupo.",
             approved: "Aprobada",
             approveDeposit: "Aprobar depósito",
             deleteTask: "Eliminar tarea",
@@ -2632,6 +2670,9 @@
             depositWallet: "Deposit wallet",
             depositHash: "Deposit hash",
             noHash: "No hash",
+            pendingTasksAdmin: "Tasks pending approval",
+            approvedTasksAdmin: "Approved tasks",
+            noTasksInGroup: "No tasks in this group.",
             approved: "Approved",
             approveDeposit: "Approve deposit",
             deleteTask: "Delete task",
@@ -2718,6 +2759,9 @@
             depositWallet: "Wallet do depósito",
             depositHash: "Hash do depósito",
             noHash: "Sem hash",
+            pendingTasksAdmin: "Tarefas pendentes de aprovação",
+            approvedTasksAdmin: "Tarefas aprovadas",
+            noTasksInGroup: "Não há tarefas neste grupo.",
             approved: "Aprovada",
             approveDeposit: "Aprovar depósito",
             deleteTask: "Eliminar tarefa",
@@ -2801,6 +2845,9 @@
             depositWallet: "Wallet депозита",
             depositHash: "Hash депозита",
             noHash: "Без hash",
+            pendingTasksAdmin: "Задачи на одобрение",
+            approvedTasksAdmin: "Одобренные задачи",
+            noTasksInGroup: "В этой группе нет задач.",
             approved: "Одобрена",
             approveDeposit: "Одобрить депозит",
             deleteTask: "Удалить задачу",
@@ -2884,6 +2931,9 @@
             depositWallet: "押金 wallet",
             depositHash: "押金 hash",
             noHash: "无 hash",
+            pendingTasksAdmin: "待批准任务",
+            approvedTasksAdmin: "已批准任务",
+            noTasksInGroup: "此组没有任务。",
             approved: "已批准",
             approveDeposit: "批准押金",
             deleteTask: "删除任务",
@@ -2967,6 +3017,9 @@
             depositWallet: "デポジットwallet",
             depositHash: "デポジットhash",
             noHash: "hashなし",
+            pendingTasksAdmin: "承認待ちタスク",
+            approvedTasksAdmin: "承認済みタスク",
+            noTasksInGroup: "このグループにタスクはありません。",
             approved: "承認済み",
             approveDeposit: "デポジットを承認",
             deleteTask: "タスクを削除",
@@ -3505,9 +3558,36 @@
             }
 
             container.innerHTML = "";
-            data.tasks.forEach((task) => {
+            const isTaskApproved = (task) => task.status === "open" || task.deposit_status === "verified";
+            const pendingTasks = data.tasks.filter((task) => !isTaskApproved(task));
+            const approvedTasks = data.tasks.filter(isTaskApproved);
+
+            const createTaskGroup = (title, tasks) => {
+              const group = document.createElement("section");
+              group.className = "admin-task-group";
+              group.innerHTML = `
+                <div class="admin-task-heading">
+                  <h4>${title}</h4>
+                  <span class="tag">${numberFormat.format(tasks.length)}</span>
+                </div>
+              `;
+              if (!tasks.length) {
+                const empty = document.createElement("div");
+                empty.className = "empty";
+                empty.textContent = getText("noTasksInGroup");
+                group.appendChild(empty);
+              }
+              container.appendChild(group);
+              return group;
+            };
+
+            const pendingGroup = createTaskGroup(getText("pendingTasksAdmin"), pendingTasks);
+            const approvedGroup = createTaskGroup(getText("approvedTasksAdmin"), approvedTasks);
+
+            const renderTaskRow = (task, group) => {
+              const isApproved = isTaskApproved(task);
               const row = document.createElement("article");
-              row.className = "admin-row";
+              row.className = `admin-row${isApproved ? " is-approved" : ""}`;
               row.innerHTML = `
                 <header>
                   <div>
@@ -3527,16 +3607,21 @@
                 <p><strong>${getText("depositWallet")}:</strong> ${task.deposit_wallet || DEPOSIT_WALLET}</p>
                 <p><strong>${getText("depositHash")}:</strong> ${task.deposit_tx || getText("noHash")}</p>
                 <div class="admin-actions">
-                  <button class="claim approve-task" type="button">${task.status === "open" ? getText("approved") : getText("approveDeposit")}</button>
+                  <button class="claim approve-task" type="button" ${isApproved ? "disabled" : ""}>${isApproved ? getText("approved") : getText("approveDeposit")}</button>
                   <button class="claim danger delete-task" type="button">${getText("deleteTask")}</button>
                 </div>
               `;
               row.querySelector("h3").textContent = task.title;
               row.querySelector("header p").textContent = `Task #${task.id} · ${task.category} · ${task.status}`;
-              row.querySelector(".approve-task").addEventListener("click", () => approveTaskDeposit(task.id));
+              if (!isApproved) {
+                row.querySelector(".approve-task").addEventListener("click", () => approveTaskDeposit(task.id));
+              }
               row.querySelector(".delete-task").addEventListener("click", () => deleteTask(task.id));
-              container.appendChild(row);
-            });
+              group.appendChild(row);
+            };
+
+            pendingTasks.forEach((task) => renderTaskRow(task, pendingGroup));
+            approvedTasks.forEach((task) => renderTaskRow(task, approvedGroup));
           } catch (error) {
             container.innerHTML = `<div class="empty">${error.message}</div>`;
           }
