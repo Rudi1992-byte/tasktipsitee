@@ -811,6 +811,19 @@
         gap: 11px;
       }
 
+      .form-section {
+        display: grid;
+        gap: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 12px;
+      }
+
+      .form-section h4 {
+        margin: 0;
+        color: var(--gold);
+        font-size: 0.92rem;
+      }
+
       .two {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1591,6 +1604,25 @@
                   Pago por persona en TASK
                   <input id="listingReward" type="number" min="10" value="250" required />
                 </label>
+                <div class="form-section">
+                  <h4>Datos del anunciante</h4>
+                  <label>
+                    Alias o nombre
+                    <input id="ownerName" maxlength="80" placeholder="Ej: TASKTIP anunciante" required />
+                  </label>
+                  <label>
+                    Telegram de contacto
+                    <input id="ownerTelegram" maxlength="80" placeholder="@usuario" required />
+                  </label>
+                  <label>
+                    Wallet de cobro o referencia
+                    <input id="ownerWallet" maxlength="42" placeholder="0x..." />
+                  </label>
+                  <label>
+                    Hash del depósito
+                    <input id="depositTx" maxlength="66" placeholder="0x..." required />
+                  </label>
+                </div>
                 <div class="balance-card">
                   <span id="listingDepositLabel">Depósito requerido</span>
                   <strong id="listingDepositTotal">255 TASK</strong>
@@ -1916,6 +1948,11 @@
             "Reward TASK": "Reward TASK",
             "Personas": "People",
             "Pago por persona en TASK": "Payment per person in TASK",
+            "Datos del anunciante": "Advertiser details",
+            "Alias o nombre": "Alias or name",
+            "Telegram de contacto": "Contact Telegram",
+            "Wallet de cobro o referencia": "Payment or reference wallet",
+            "Hash del depósito": "Deposit hash",
             "Envía pago por persona x cupos + 5 TASK de fee a": "Send payment per person x spots + 5 TASK fee to",
             "Para ofrecer un servicio solo envía 5 TASK de fee a": "To offer a service, only send the 5 TASK fee to",
             "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "and paste the hash. Your service stays pending until the admin verifies the deposit.",
@@ -2169,6 +2206,11 @@
             "Reward TASK": "Recompensa TASK",
             "Personas": "Pessoas",
             "Pago por persona en TASK": "Pagamento por pessoa em TASK",
+            "Datos del anunciante": "Dados do anunciante",
+            "Alias o nombre": "Alias ou nome",
+            "Telegram de contacto": "Telegram de contato",
+            "Wallet de cobro o referencia": "Wallet de recebimento ou referência",
+            "Hash del depósito": "Hash do depósito",
             "Envía pago por persona x cupos + 5 TASK de fee a": "Envie pagamento por pessoa x vagas + 5 TASK de taxa para",
             "Para ofrecer un servicio solo envía 5 TASK de fee a": "Para oferecer um serviço, envie apenas 5 TASK de taxa para",
             "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "e cole o hash. Seu serviço fica pendente até o admin verificar o depósito.",
@@ -2239,6 +2281,11 @@
             "Reward TASK": "Награда TASK",
             "Personas": "Люди",
             "Pago por persona en TASK": "Оплата на человека в TASK",
+            "Datos del anunciante": "Данные рекламодателя",
+            "Alias o nombre": "Псевдоним или имя",
+            "Telegram de contacto": "Telegram для связи",
+            "Wallet de cobro o referencia": "Wallet для оплаты или справки",
+            "Hash del depósito": "Hash депозита",
             "Envía pago por persona x cupos + 5 TASK de fee a": "Отправьте оплату на человека x места + комиссию 5 TASK на",
             "Para ofrecer un servicio solo envía 5 TASK de fee a": "Чтобы предложить услугу, отправьте только комиссию 5 TASK на",
             "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "и вставьте хэш. Услуга останется на проверке, пока админ не подтвердит депозит.",
@@ -2309,6 +2356,11 @@
             "Reward TASK": "TASK 奖励",
             "Personas": "人数",
             "Pago por persona en TASK": "每人支付 TASK",
+            "Datos del anunciante": "发布者信息",
+            "Alias o nombre": "昵称或姓名",
+            "Telegram de contacto": "联系 Telegram",
+            "Wallet de cobro o referencia": "收款或参考 wallet",
+            "Hash del depósito": "押金 hash",
             "Envía pago por persona x cupos + 5 TASK de fee a": "发送每人支付 x 名额 + 5 TASK 手续费到",
             "Para ofrecer un servicio solo envía 5 TASK de fee a": "要提供服务，只需发送 5 TASK 发布费到",
             "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "并粘贴哈希。管理员确认押金前，服务将保持待审核。",
@@ -2379,6 +2431,11 @@
             "Reward TASK": "TASK報酬",
             "Personas": "人数",
             "Pago por persona en TASK": "1人あたりのTASK支払い",
+            "Datos del anunciante": "広告主情報",
+            "Alias o nombre": "エイリアスまたは名前",
+            "Telegram de contacto": "連絡用Telegram",
+            "Wallet de cobro o referencia": "受取または参照wallet",
+            "Hash del depósito": "デポジットhash",
             "Envía pago por persona x cupos + 5 TASK de fee a": "1人あたりの支払い x 枠数 + 5 TASK手数料を送信先:",
             "Para ofrecer un servicio solo envía 5 TASK de fee a": "サービスを提供するには、5 TASKの掲載料だけを送信先:",
             "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "そしてハッシュを貼り付けます。管理者がデポジットを確認するまでサービスは保留になります。",
@@ -2441,6 +2498,7 @@
             proofSent: "Prueba enviada. El admin revisara y pagara manualmente.",
             dbBeforeProof: "Conecta Cloudflare D1 antes de enviar pruebas reales.",
             dbBeforePost: "Conecta Cloudflare D1 antes de publicar tareas reales.",
+            requiredListingFields: "Completa alias, Telegram y hash del depósito antes de publicar.",
             rewardMin: "Para pedidos, el pago minimo es 10 TASK por persona y debe haber al menos 1 cupo.",
             taskPosted: "Tarea publicada. Recuerda cobrar/verificar manualmente el fee antes de activarla si aplica.",
             copied: "Copiado",
@@ -2522,6 +2580,7 @@
             proofSent: "Proof submitted. The admin will review and pay manually.",
             dbBeforeProof: "Connect Cloudflare D1 before submitting real proofs.",
             dbBeforePost: "Connect Cloudflare D1 before publishing real tasks.",
+            requiredListingFields: "Complete alias, Telegram and deposit hash before publishing.",
             rewardMin: "For requests, the minimum payment is 10 TASK per person and at least 1 spot is required.",
             taskPosted: "Task published. Remember to collect/verify the fee manually before activating it if needed.",
             copied: "Copied",
@@ -2605,6 +2664,7 @@
             proofSent: "Prova enviada. O admin revisará e pagará manualmente.",
             dbBeforeProof: "Conecte o Cloudflare D1 antes de enviar provas reais.",
             dbBeforePost: "Conecte o Cloudflare D1 antes de publicar tarefas reais.",
+            requiredListingFields: "Complete alias, Telegram e hash do depósito antes de publicar.",
             rewardMin: "Para pedidos, o pagamento mínimo é 10 TASK por pessoa e deve haver pelo menos 1 vaga.",
             taskPosted: "Tarefa publicada. Lembre-se de cobrar/verificar a taxa manualmente antes de ativá-la, se necessário.",
             copied: "Copiado",
@@ -2685,6 +2745,7 @@
             proofSent: "Доказательство отправлено. Админ проверит и оплатит вручную.",
             dbBeforeProof: "Подключите Cloudflare D1 перед отправкой реальных доказательств.",
             dbBeforePost: "Подключите Cloudflare D1 перед публикацией реальных задач.",
+            requiredListingFields: "Заполните псевдоним, Telegram и hash депозита перед публикацией.",
             rewardMin: "Для запросов минимальная оплата 10 TASK на человека и минимум 1 место.",
             taskPosted: "Задача опубликована. При необходимости вручную проверьте комиссию перед активацией.",
             copied: "Скопировано",
@@ -2765,6 +2826,7 @@
             proofSent: "证明已提交。管理员将审核并手动支付。",
             dbBeforeProof: "提交真实证明前请连接 Cloudflare D1。",
             dbBeforePost: "发布真实任务前请连接 Cloudflare D1。",
+            requiredListingFields: "发布前请填写昵称、Telegram 和押金 hash。",
             rewardMin: "需求任务每人最低支付 10 TASK，并且至少需要 1 个名额。",
             taskPosted: "任务已发布。如需要，请在激活前手动收取/验证费用。",
             copied: "已复制",
@@ -2845,6 +2907,7 @@
             proofSent: "証明を送信しました。管理者が確認し、手動で支払います。",
             dbBeforeProof: "実際の証明を送信する前にCloudflare D1を接続してください。",
             dbBeforePost: "実際のタスクを公開する前にCloudflare D1を接続してください。",
+            requiredListingFields: "公開前にエイリアス、Telegram、デポジットhashを入力してください。",
             rewardMin: "依頼では1人あたり最低10 TASK、少なくとも1枠が必要です。",
             taskPosted: "タスクを公開しました。必要に応じて有効化前に手数料を手動で確認してください。",
             copied: "コピー済み",
@@ -3184,19 +3247,26 @@
             return;
           }
 
-          const ownerName = prompt(getText("promptOwnerName"));
-          if (!ownerName) return;
-          const ownerTelegram = prompt(getText("promptOwnerTelegram"));
-          if (!ownerTelegram) return;
           const type = $("#listingType").value;
           const category = $("#listingCategory").value;
-          const ownerWallet = prompt(getText("promptOwnerWallet"));
+          const ownerName = $("#ownerName").value.trim();
+          const ownerTelegram = $("#ownerTelegram").value.trim();
+          const ownerWallet = $("#ownerWallet").value.trim();
+          const depositTx = $("#depositTx").value.trim();
+          if (!ownerName || !ownerTelegram || !depositTx) {
+            alert(getText("requiredListingFields"));
+            return;
+          }
           if (ownerWallet && !isValidWallet(ownerWallet)) {
             alert(getText("invalidWallet"));
             return;
           }
           if (type === "offer" && !isValidWallet(ownerWallet)) {
             alert(getText("offerWalletRequired"));
+            return;
+          }
+          if (!/^0x[a-fA-F0-9]{64}$/.test(depositTx)) {
+            alert(getText("depositHashPrompt"));
             return;
           }
           const reward = type === "offer" ? 0 : Number($("#listingReward").value || 0);
@@ -3209,10 +3279,7 @@
             return;
           }
           const totalDeposit = type === "offer" ? CREATE_TASK_FEE : Math.floor(reward) * participantLimit + CREATE_TASK_FEE;
-          const depositTx = prompt(
-            `${getText("depositRequired")}\n\nWallet: ${DEPOSIT_WALLET}\nTotal: ${numberFormat.format(totalDeposit)} TASK\n\n${type === "offer" ? getText("offerDepositHashPrompt") : getText("depositHashPrompt")}`
-          );
-          if (!depositTx) return;
+          $("#listingDepositTotal").textContent = `${numberFormat.format(totalDeposit)} TASK`;
 
           const listing = {
             type,
@@ -3238,6 +3305,7 @@
             await loadListings();
             alert(getText("taskPostedPending"));
           } catch (error) {
+            $("#listingDepositTotal").textContent = getText("error");
             alert(error.message);
           }
         }
