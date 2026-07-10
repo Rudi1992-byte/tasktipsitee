@@ -92,9 +92,93 @@ function requireAdmin(request, env) {
 
 async function ensureMarketplaceSchema(env) {
   if (marketplaceSchemaReady) return;
-  try {
-    await env.DB.prepare("ALTER TABLE tasks ADD COLUMN participant_limit INTEGER DEFAULT 1").run();
-  } catch {
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL DEFAULT 'request',
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      category TEXT NOT NULL,
+      reward INTEGER NOT NULL DEFAULT 10,
+      participant_limit INTEGER DEFAULT 1,
+      owner_name TEXT NOT NULL DEFAULT 'TASKTIP user',
+      owner_telegram TEXT,
+      owner_wallet TEXT,
+      owner_contact TEXT,
+      deposit_wallet TEXT NOT NULL DEFAULT '0xf3542c8A751f880ed6E046881cBF1E3D707d9492',
+      creation_fee INTEGER NOT NULL DEFAULT 5,
+      total_deposit INTEGER,
+      deposit_tx TEXT,
+      deposit_status TEXT NOT NULL DEFAULT 'pending',
+      verification_kind TEXT NOT NULL DEFAULT 'manual',
+      validation_value TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      created_at TEXT
+    )`,
+    `CREATE TABLE IF NOT EXISTS claims (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      task_id INTEGER NOT NULL,
+      claimant_name TEXT NOT NULL,
+      claimant_telegram TEXT,
+      claimant_chat_id TEXT,
+      claimant_wallet TEXT NOT NULL,
+      claimant_contact TEXT,
+      proof TEXT NOT NULL,
+      screenshot_url TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      verifier_note TEXT,
+      paid_amount INTEGER,
+      payment_tx TEXT,
+      admin_note TEXT,
+      created_at TEXT,
+      verified_at TEXT,
+      paid_at TEXT
+    )`,
+    "ALTER TABLE tasks ADD COLUMN type TEXT NOT NULL DEFAULT 'request'",
+    "ALTER TABLE tasks ADD COLUMN title TEXT",
+    "ALTER TABLE tasks ADD COLUMN description TEXT",
+    "ALTER TABLE tasks ADD COLUMN category TEXT",
+    "ALTER TABLE tasks ADD COLUMN reward INTEGER NOT NULL DEFAULT 10",
+    "ALTER TABLE tasks ADD COLUMN participant_limit INTEGER DEFAULT 1",
+    "ALTER TABLE tasks ADD COLUMN owner_name TEXT NOT NULL DEFAULT 'TASKTIP user'",
+    "ALTER TABLE tasks ADD COLUMN owner_telegram TEXT",
+    "ALTER TABLE tasks ADD COLUMN owner_wallet TEXT",
+    "ALTER TABLE tasks ADD COLUMN owner_contact TEXT",
+    "ALTER TABLE tasks ADD COLUMN deposit_wallet TEXT NOT NULL DEFAULT '0xf3542c8A751f880ed6E046881cBF1E3D707d9492'",
+    "ALTER TABLE tasks ADD COLUMN creation_fee INTEGER NOT NULL DEFAULT 5",
+    "ALTER TABLE tasks ADD COLUMN total_deposit INTEGER",
+    "ALTER TABLE tasks ADD COLUMN deposit_tx TEXT",
+    "ALTER TABLE tasks ADD COLUMN deposit_status TEXT NOT NULL DEFAULT 'pending'",
+    "ALTER TABLE tasks ADD COLUMN verification_kind TEXT NOT NULL DEFAULT 'manual'",
+    "ALTER TABLE tasks ADD COLUMN validation_value TEXT",
+    "ALTER TABLE tasks ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'",
+    "ALTER TABLE tasks ADD COLUMN created_at TEXT",
+    "ALTER TABLE claims ADD COLUMN task_id INTEGER",
+    "ALTER TABLE claims ADD COLUMN claimant_name TEXT",
+    "ALTER TABLE claims ADD COLUMN claimant_telegram TEXT",
+    "ALTER TABLE claims ADD COLUMN claimant_chat_id TEXT",
+    "ALTER TABLE claims ADD COLUMN claimant_wallet TEXT",
+    "ALTER TABLE claims ADD COLUMN claimant_contact TEXT",
+    "ALTER TABLE claims ADD COLUMN proof TEXT",
+    "ALTER TABLE claims ADD COLUMN screenshot_url TEXT",
+    "ALTER TABLE claims ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'",
+    "ALTER TABLE claims ADD COLUMN verifier_note TEXT",
+    "ALTER TABLE claims ADD COLUMN paid_amount INTEGER",
+    "ALTER TABLE claims ADD COLUMN payment_tx TEXT",
+    "ALTER TABLE claims ADD COLUMN admin_note TEXT",
+    "ALTER TABLE claims ADD COLUMN created_at TEXT",
+    "ALTER TABLE claims ADD COLUMN verified_at TEXT",
+    "ALTER TABLE claims ADD COLUMN paid_at TEXT",
+    "CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks (status)",
+    "CREATE INDEX IF NOT EXISTS idx_claims_task_contact ON claims (task_id, claimant_contact)",
+    "CREATE UNIQUE INDEX IF NOT EXISTS idx_claims_task_wallet ON claims (task_id, claimant_wallet)"
+  ];
+
+  for (const statement of statements) {
+    try {
+      await env.DB.prepare(statement).run();
+    } catch {
+    }
   }
   marketplaceSchemaReady = true;
 }
