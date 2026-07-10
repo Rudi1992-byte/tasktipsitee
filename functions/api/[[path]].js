@@ -5,6 +5,8 @@ const jsonHeaders = {
   "access-control-allow-headers": "content-type,x-admin-token",
 };
 
+let marketplaceSchemaReady = false;
+
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: jsonHeaders });
 }
@@ -88,7 +90,17 @@ function requireAdmin(request, env) {
   return { ok: true };
 }
 
+async function ensureMarketplaceSchema(env) {
+  if (marketplaceSchemaReady) return;
+  try {
+    await env.DB.prepare("ALTER TABLE tasks ADD COLUMN participant_limit INTEGER NOT NULL DEFAULT 1").run();
+  } catch {
+  }
+  marketplaceSchemaReady = true;
+}
+
 async function listTasks(env) {
+  await ensureMarketplaceSchema(env);
   const result = await env.DB.prepare(
     `SELECT
       tasks.*,
@@ -105,43 +117,51 @@ async function listTasks(env) {
 }
 
 async function createTask(request, env) {
+  await ensureMarketplaceSchema(env);
   const body = await readJson(request);
   const title = cleanText(body.title, 90);
   const description = cleanText(body.description, 260);
   const category = cleanText(body.category, 40);
   const type = body.type === "offer" ? "offer" : "request";
   const reward = Number(body.reward || 0);
+  const requestedParticipants = Number(body.participant_limit || body.participantLimit || 1);
+  const participantLimit =
+    type === "request" && Number.isFinite(requestedParticipants)
+      ? Math.max(1, Math.min(500, Math.floor(requestedParticipants)))
+      : 1;
   const ownerName = cleanText(body.owner_name || body.ownerName || "TASKTIP user", 80);
   const ownerTelegram = cleanText(body.owner_telegram || body.ownerTelegram || "", 80);
   const ownerWallet = cleanText(body.owner_wallet || body.ownerWallet || "", 80);
   const ownerContact = cleanText(body.owner_contact || body.ownerContact || body.owner || "", 120);
   const depositWallet = "0xf3542c8A751f880ed6E046881cBF1E3D707d9492";
   const creationFee = 5;
-  const totalDeposit = Math.floor(reward) + creationFee;
+  const storedReward = type === "offer" ? 10 : Math.floor(reward);
+  const totalDeposit = type === "offer" ? creationFee : storedReward * participantLimit + creationFee;
   const depositTx = cleanText(body.deposit_tx || body.depositTx || "", 120);
   const verificationKind = cleanText(body.verification_kind || body.verificationKind || "manual", 24);
   const validationValue = cleanText(body.validation_value || body.validationValue || "", 140);
 
   if (!title || !description || !category) return badRequest("Missing title, description or category.");
-  if (!Number.isFinite(reward) || reward < 10) return badRequest("Reward must be at least 10 TASK.");
+  if (type === "request" && (!Number.isFinite(reward) || reward < 10)) return badRequest("Reward must be at least 10 TASK per person.");
   if (!ownerName) return badRequest("Advertiser name is required.");
   if (!isTxHash(depositTx)) return badRequest("Valid deposit transaction hash is required.");
 
   const result = await env.DB.prepare(
     `INSERT INTO tasks (
-      type, title, description, category, reward,
+      type, title, description, category, reward, participant_limit,
       owner_name, owner_telegram, owner_wallet, owner_contact,
       deposit_wallet, creation_fee, total_deposit, deposit_tx, deposit_status, status,
       verification_kind, validation_value
     )
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?)`
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?)`
   )
     .bind(
       type,
       title,
       description,
       category,
-      Math.floor(reward),
+      storedReward,
+      participantLimit,
       ownerName,
       ownerTelegram,
       ownerWallet,
@@ -159,9 +179,20 @@ async function createTask(request, env) {
 }
 
 async function claimTask(request, env, id) {
+  await ensureMarketplaceSchema(env);
   const task = await env.DB.prepare("SELECT * FROM tasks WHERE id = ?").bind(id).first();
   if (!task) return json({ error: "Task not found." }, 404);
   if (task.status !== "open") return badRequest("Task is not open.");
+  if (task.type === "offer") return badRequest("Service offers are contact listings, not reward tasks.");
+
+  const claimCount = await env.DB.prepare(
+    "SELECT COUNT(*) AS count FROM claims WHERE task_id = ? AND status NOT IN ('rejected', 'deleted')"
+  )
+    .bind(id)
+    .first();
+  if (Number(claimCount?.count || 0) >= Number(task.participant_limit || 1)) {
+    return badRequest("This task has no available spots left.");
+  }
 
   const body = await readJson(request);
   const claimantName = cleanText(body.claimant_name || body.claimantName || "", 80);

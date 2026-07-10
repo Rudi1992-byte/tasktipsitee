@@ -1477,7 +1477,7 @@
             </article>
             <article class="verify-card">
               <strong>Mínimo 10 TASK</strong>
-              <p>El mínimo de retiro/pago por tarea es 10 TASK. No se publican rewards menores.</p>
+              <p>En pedidos, el pago mínimo es 10 TASK por persona. Las ofertas de servicio solo pagan 5 TASK de publicación.</p>
             </article>
             <article class="verify-card">
               <strong>Pago hasta 24h</strong>
@@ -1489,7 +1489,7 @@
             </article>
             <article class="verify-card">
               <strong>Depósito de tareas</strong>
-              <p>El anunciante deposita reward + 5 TASK de fee y pega el hash. El admin verifica antes de abrir la tarea.</p>
+              <p>Quien pide deposita pago por persona x cupos + 5 TASK de fee. Quien ofrece deposita solo 5 TASK para publicar.</p>
             </article>
           </div>
         </div>
@@ -1578,18 +1578,27 @@
                       <option value="Transacción">Transacción</option>
                     </select>
                   </label>
-                  <label>
-                    Reward TASK
-                    <input id="listingReward" type="number" min="10" value="250" required />
+                  <label id="listingParticipantsLabel">
+                    Personas
+                    <input id="listingParticipants" type="number" min="1" max="500" value="1" required />
                   </label>
                 </div>
+                <label id="listingRewardLabel">
+                  Pago por persona en TASK
+                  <input id="listingReward" type="number" min="10" value="250" required />
+                </label>
                 <div class="balance-card">
-                  <span>Depósito requerido</span>
+                  <span id="listingDepositLabel">Depósito requerido</span>
                   <strong id="listingDepositTotal">255 TASK</strong>
-                  <p style="margin: 8px 0 0; color: var(--muted); line-height: 1.45;">
-                    Envía reward + 5 TASK de fee a
+                  <p id="listingDepositHelp" style="margin: 8px 0 0; color: var(--muted); line-height: 1.45;">
+                    Envía pago por persona x cupos + 5 TASK de fee a
                     <strong style="color: var(--soft); overflow-wrap: anywhere;">0xf3542c8A751f880ed6E046881cBF1E3D707d9492</strong>
                     y pega el hash cuando publiques. La tarea queda pendiente hasta que el admin verifique el depósito.
+                  </p>
+                  <p id="listingOfferHelp" style="display: none; margin: 8px 0 0; color: var(--muted); line-height: 1.45;">
+                    Para ofrecer un servicio solo envía 5 TASK de fee a
+                    <strong style="color: var(--soft); overflow-wrap: anywhere;">0xf3542c8A751f880ed6E046881cBF1E3D707d9492</strong>
+                    y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.
                   </p>
                 </div>
                 <button class="btn primary" type="submit">Publicar</button>
@@ -1875,10 +1884,13 @@
             "Una misma wallet solo puede enviar una prueba por tarea. Duplicados pueden rechazarse.": "The same wallet can submit only one proof per task. Duplicates may be rejected.",
             "Mínimo 10 TASK": "Minimum 10 TASK",
             "El mínimo de retiro/pago por tarea es 10 TASK. No se publican rewards menores.": "The minimum withdrawal/payment per task is 10 TASK. Lower rewards are not published.",
+            "En pedidos, el pago mínimo es 10 TASK por persona. Las ofertas de servicio solo pagan 5 TASK de publicación.": "For requests, the minimum payment is 10 TASK per person. Service offers only pay a 5 TASK listing fee.",
             "Pago hasta 24h": "Payment up to 24h",
             "Los pagos manuales pueden demorar hasta 24 horas según revisión y tipo de tarea.": "Manual payments may take up to 24 hours depending on review and task type.",
             "Hash de pago": "Payment hash",
             "Cuando se pague, el admin podrá guardar el hash o nota de pago para control interno.": "When paid, the admin can save the hash or payment note for internal control.",
+            "Depósito de tareas": "Task deposit",
+            "Quien pide deposita pago por persona x cupos + 5 TASK de fee. Quien ofrece deposita solo 5 TASK para publicar.": "Requesters deposit payment per person x spots + 5 TASK fee. Service providers deposit only 5 TASK to publish.",
             "Task-to-Earn Board": "Task-to-Earn Board",
             "Marketplace real para publicar tareas verificables y medir cuánto TASK se pagaría por cada trabajo.": "Real marketplace to publish verifiable tasks and measure how much TASK would be paid for each job.",
             "Servicios + rewards": "Services + rewards",
@@ -1895,6 +1907,11 @@
             "Descripción": "Description",
             "Categoría": "Category",
             "Reward TASK": "Reward TASK",
+            "Personas": "People",
+            "Pago por persona en TASK": "Payment per person in TASK",
+            "Envía pago por persona x cupos + 5 TASK de fee a": "Send payment per person x spots + 5 TASK fee to",
+            "Para ofrecer un servicio solo envía 5 TASK de fee a": "To offer a service, only send the 5 TASK fee to",
+            "y pega el hash. Tu servicio queda pendiente hasta que el admin verifique el depósito.": "and paste the hash. Your service stays pending until the admin verifies the deposit.",
             "Publicar": "Publish",
             "Distribución de TASK pensada para liquidez, desarrollo de la plataforma, equipo y futuras recompensas del ecosistema.": "TASK distribution designed for liquidity, platform development, team and future ecosystem rewards.",
             "Liquidez": "Liquidity",
@@ -2090,6 +2107,13 @@
             advertiser: "TASKTIP anunciante",
             verified: "verified",
             reward: "Reward",
+            rewardPerPerson: "Pago por persona",
+            publishFee: "Fee publicación",
+            listingFee: "Fee",
+            spots: "cupos",
+            contact: "Contactar",
+            contactAdmin: "Contacta al equipo TASKTIP para coordinar este servicio.",
+            full: "Completo",
             sendProof: "Enviar prueba",
             sending: "Enviando",
             received: "Recibida",
@@ -2105,11 +2129,12 @@
             proofSent: "Prueba enviada. El admin revisara y pagara manualmente.",
             dbBeforeProof: "Conecta Cloudflare D1 antes de enviar pruebas reales.",
             dbBeforePost: "Conecta Cloudflare D1 antes de publicar tareas reales.",
-            rewardMin: "El reward minimo es 10 TASK.",
+            rewardMin: "Para pedidos, el pago minimo es 10 TASK por persona y debe haber al menos 1 cupo.",
             taskPosted: "Tarea publicada. Recuerda cobrar/verificar manualmente el fee antes de activarla si aplica.",
             copied: "Copiado",
             manualCopy: "Copia manual",
-            depositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por reward + 5 TASK enviada a la wallet de TASKTIP.",
+            depositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por pago por persona x cupos + 5 TASK enviada a la wallet de TASKTIP.",
+            offerDepositHashPrompt: "Pega el hash del deposito. Debe ser la transaccion por 5 TASK de fee enviada a la wallet de TASKTIP.",
             depositRequired: "Antes de publicar envia el deposito requerido y pega el hash.",
             taskPostedPending: "Tarea recibida. Queda pendiente hasta que el admin verifique el deposito."
           },
@@ -2122,6 +2147,13 @@
             advertiser: "TASKTIP advertiser",
             verified: "verified",
             reward: "Reward",
+            rewardPerPerson: "Pay per person",
+            publishFee: "Listing fee",
+            listingFee: "Fee",
+            spots: "spots",
+            contact: "Contact",
+            contactAdmin: "Contact the TASKTIP team to coordinate this service.",
+            full: "Full",
             sendProof: "Submit proof",
             sending: "Sending",
             received: "Received",
@@ -2137,11 +2169,12 @@
             proofSent: "Proof submitted. The admin will review and pay manually.",
             dbBeforeProof: "Connect Cloudflare D1 before submitting real proofs.",
             dbBeforePost: "Connect Cloudflare D1 before publishing real tasks.",
-            rewardMin: "The minimum reward is 10 TASK.",
+            rewardMin: "For requests, the minimum payment is 10 TASK per person and at least 1 spot is required.",
             taskPosted: "Task published. Remember to collect/verify the fee manually before activating it if needed.",
             copied: "Copied",
             manualCopy: "Copy manually",
-            depositHashPrompt: "Paste the deposit hash. It must be the transaction for reward + 5 TASK sent to the TASKTIP wallet.",
+            depositHashPrompt: "Paste the deposit hash. It must be the transaction for payment per person x spots + 5 TASK sent to the TASKTIP wallet.",
+            offerDepositHashPrompt: "Paste the deposit hash. It must be the transaction for the 5 TASK fee sent to the TASKTIP wallet.",
             depositRequired: "Before publishing, send the required deposit and paste the hash.",
             taskPostedPending: "Task received. It stays pending until the admin verifies the deposit."
           }
@@ -2272,10 +2305,22 @@
         }
 
         function updateDepositTotal() {
+          const type = $("#listingType")?.value || "request";
           const reward = Number($("#listingReward")?.value || 0);
-          const total = Number.isFinite(reward) ? Math.max(0, Math.floor(reward)) + CREATE_TASK_FEE : CREATE_TASK_FEE;
+          const participants = Number($("#listingParticipants")?.value || 1);
+          const safeReward = Number.isFinite(reward) ? Math.max(0, Math.floor(reward)) : 0;
+          const safeParticipants = Number.isFinite(participants) ? Math.max(1, Math.floor(participants)) : 1;
+          const isOffer = type === "offer";
+          const total = isOffer ? CREATE_TASK_FEE : safeReward * safeParticipants + CREATE_TASK_FEE;
           const target = $("#listingDepositTotal");
           if (target) target.textContent = `${numberFormat.format(total)} TASK`;
+
+          $("#listingParticipantsLabel").style.display = isOffer ? "none" : "";
+          $("#listingRewardLabel").style.display = isOffer ? "none" : "";
+          $("#listingDepositHelp").style.display = isOffer ? "none" : "";
+          $("#listingOfferHelp").style.display = isOffer ? "" : "none";
+          $("#listingReward").required = !isOffer;
+          $("#listingParticipants").required = !isOffer;
         }
 
         async function loadListings() {
@@ -2322,6 +2367,10 @@
             const typeText = listing.type === "offer" ? getText("service") : getText("task");
             const categoryText = currentLanguage === "es" ? listing.category : dictionaries[currentLanguage]?.[listing.category] || listing.category;
             const verified = Number(listing.verified_count || 0);
+            const participantLimit = Math.max(1, Number(listing.participant_limit || 1));
+            const claimCount = Math.max(0, Number(listing.claim_count || 0));
+            const remaining = Math.max(0, participantLimit - claimCount);
+            const isOffer = listing.type === "offer";
             item.innerHTML = `
               <div>
                 <h3></h3>
@@ -2330,18 +2379,26 @@
                   <span class="tag ${listing.type}">${typeText}</span>
                   <span class="tag">${categoryText}</span>
                   <span class="tag">${listing.owner_name || getText("advertiser")}</span>
+                  ${isOffer ? `<span class="tag">${getText("listingFee")} 5 TASK</span>` : `<span class="tag">${remaining}/${participantLimit} ${getText("spots")}</span>`}
                   <span class="tag">${verified} ${getText("verified")}</span>
                 </div>
               </div>
               <div class="reward">
-                <span class="mini-label">${getText("reward")}</span>
-                <strong>${numberFormat.format(listing.reward)} TASK</strong>
-                <button class="claim" type="button">${getText("sendProof")}</button>
+                <span class="mini-label">${isOffer ? getText("publishFee") : getText("rewardPerPerson")}</span>
+                <strong>${isOffer ? "5" : numberFormat.format(listing.reward)} TASK</strong>
+                <button class="claim" type="button"${isOffer ? "" : remaining <= 0 ? " disabled" : ""}>${isOffer ? getText("contact") : remaining <= 0 ? getText("full") : getText("sendProof")}</button>
               </div>
             `;
             item.querySelector("h3").textContent = listing.title;
             item.querySelector("p").textContent = listing.description;
-            item.querySelector(".claim").addEventListener("click", () => submitProof(listing, item));
+            item.querySelector(".claim").addEventListener("click", () => {
+              if (isOffer) {
+                const contact = listing.owner_telegram ? `Telegram: ${listing.owner_telegram}` : getText("contactAdmin");
+                alert(contact);
+                return;
+              }
+              if (remaining > 0) submitProof(listing, item);
+            });
             board.appendChild(item);
           });
         }
@@ -2401,18 +2458,30 @@
           const ownerTelegram = prompt(getText("promptOwnerTelegram"));
           if (!ownerTelegram) return;
           const ownerWallet = prompt(getText("promptOwnerWallet"));
+          const type = $("#listingType").value;
+          const category = $("#listingCategory").value;
+          const reward = type === "offer" ? 0 : Number($("#listingReward").value || 0);
+          const rawParticipantLimit = Number($("#listingParticipants").value || 1);
+          const participantLimit = type === "offer" || !Number.isFinite(rawParticipantLimit) ? 1 : Math.max(1, Math.floor(rawParticipantLimit));
+          const title = $("#listingTitle").value.trim();
+          const description = $("#listingDescription").value.trim();
+          if (!title || !description || (type === "request" && (!Number.isFinite(reward) || reward < 10 || participantLimit < 1))) {
+            alert(getText("rewardMin"));
+            return;
+          }
+          const totalDeposit = type === "offer" ? CREATE_TASK_FEE : Math.floor(reward) * participantLimit + CREATE_TASK_FEE;
           const depositTx = prompt(
-            `${getText("depositRequired")}\n\nWallet: ${DEPOSIT_WALLET}\nTotal: ${Number($("#listingReward").value || 0) + CREATE_TASK_FEE} TASK\n\n${getText("depositHashPrompt")}`
+            `${getText("depositRequired")}\n\nWallet: ${DEPOSIT_WALLET}\nTotal: ${numberFormat.format(totalDeposit)} TASK\n\n${type === "offer" ? getText("offerDepositHashPrompt") : getText("depositHashPrompt")}`
           );
           if (!depositTx) return;
 
-          const category = $("#listingCategory").value;
           const listing = {
-            type: $("#listingType").value,
-            title: $("#listingTitle").value.trim(),
-            description: $("#listingDescription").value.trim(),
+            type,
+            title,
+            description,
             category,
-            reward: Number($("#listingReward").value || 0),
+            reward,
+            participant_limit: participantLimit,
             owner_name: ownerName,
             owner_telegram: ownerTelegram,
             owner_wallet: ownerWallet || "",
@@ -2421,15 +2490,11 @@
             ...verificationForCategory(category),
           };
 
-          if (!listing.title || !listing.description || listing.reward < 10) {
-            alert(getText("rewardMin"));
-            return;
-          }
-
           try {
             await requestApi("/tasks", { method: "POST", body: JSON.stringify(listing) });
             event.currentTarget.reset();
             $("#listingReward").value = 250;
+            $("#listingParticipants").value = 1;
             updateDepositTotal();
             await loadListings();
             alert(getText("taskPostedPending"));
@@ -2594,9 +2659,10 @@
                 <div class="tags">
                   <span class="tag">${task.owner_name}</span>
                   <span class="tag">${task.owner_telegram || "Sin Telegram"}</span>
-                  <span class="tag">Reward ${numberFormat.format(task.reward)} TASK</span>
+                  <span class="tag">${task.type === "offer" ? "Oferta de servicio" : `Pago/persona ${numberFormat.format(task.reward)} TASK`}</span>
+                  <span class="tag">Cupos ${numberFormat.format(task.participant_limit || 1)}</span>
                   <span class="tag">Fee ${numberFormat.format(task.creation_fee || CREATE_TASK_FEE)} TASK</span>
-                  <span class="tag">Total ${numberFormat.format(task.total_deposit || Number(task.reward || 0) + CREATE_TASK_FEE)} TASK</span>
+                  <span class="tag">Total ${numberFormat.format(task.total_deposit || (task.type === "offer" ? CREATE_TASK_FEE : Number(task.reward || 0) * Number(task.participant_limit || 1) + CREATE_TASK_FEE))} TASK</span>
                 </div>
                 <p><strong>Wallet depósito:</strong> ${task.deposit_wallet || DEPOSIT_WALLET}</p>
                 <p><strong>Hash depósito:</strong> ${task.deposit_tx || "Sin hash"}</p>
@@ -2711,7 +2777,9 @@
         $("#copyHero").addEventListener("click", (event) => copyContract(event.currentTarget));
         $("#languageSelect").addEventListener("change", (event) => applyLanguage(event.target.value));
         $("#listingForm").addEventListener("submit", createListing, true);
+        $("#listingType").addEventListener("change", updateDepositTotal);
         $("#listingReward").addEventListener("input", updateDepositTotal);
+        $("#listingParticipants").addEventListener("input", updateDepositTotal);
         $("#balanceForm").addEventListener("submit", loadBalance);
         $("#adminForm").addEventListener("submit", loadAdminClaims);
         ["#searchInput", "#typeFilter", "#categoryFilter"].forEach((selector) => {

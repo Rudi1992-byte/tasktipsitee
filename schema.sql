@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   description TEXT NOT NULL,
   category TEXT NOT NULL,
   reward INTEGER NOT NULL CHECK (reward >= 10),
+  participant_limit INTEGER NOT NULL DEFAULT 1,
   owner_name TEXT NOT NULL,
   owner_telegram TEXT,
   owner_wallet TEXT,
