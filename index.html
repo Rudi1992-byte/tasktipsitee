@@ -824,6 +824,22 @@
         font-size: 0.92rem;
       }
 
+      .form-status {
+        display: none;
+        border: 1px solid rgba(255, 107, 107, 0.35);
+        border-radius: 8px;
+        padding: 12px;
+        color: #ffb4b4;
+        background: rgba(255, 107, 107, 0.08);
+        line-height: 1.45;
+      }
+
+      .form-status.ok {
+        border-color: rgba(153, 242, 79, 0.35);
+        color: var(--green);
+        background: rgba(153, 242, 79, 0.08);
+      }
+
       .two {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1639,6 +1655,7 @@
                   </p>
                 </div>
                 <button class="btn primary" type="submit">Publicar</button>
+                <div class="form-status" id="listingStatus" role="status"></div>
               </form>
             </aside>
           </div>
@@ -2499,6 +2516,8 @@
             dbBeforeProof: "Conecta Cloudflare D1 antes de enviar pruebas reales.",
             dbBeforePost: "Conecta Cloudflare D1 antes de publicar tareas reales.",
             requiredListingFields: "Completa alias, Telegram y hash del depósito antes de publicar.",
+            apiHtmlError: "Cloudflare devolvió una página HTML en vez de JSON. Revisa que esté desplegado el último commit y que Pages Functions esté activo.",
+            listingCreated: "Publicación recibida. Revísala en el panel admin para aprobar el depósito.",
             rewardMin: "Para pedidos, el pago minimo es 10 TASK por persona y debe haber al menos 1 cupo.",
             taskPosted: "Tarea publicada. Recuerda cobrar/verificar manualmente el fee antes de activarla si aplica.",
             copied: "Copiado",
@@ -2581,6 +2600,8 @@
             dbBeforeProof: "Connect Cloudflare D1 before submitting real proofs.",
             dbBeforePost: "Connect Cloudflare D1 before publishing real tasks.",
             requiredListingFields: "Complete alias, Telegram and deposit hash before publishing.",
+            apiHtmlError: "Cloudflare returned an HTML page instead of JSON. Check that the latest commit is deployed and Pages Functions is active.",
+            listingCreated: "Listing received. Review it in the admin panel to approve the deposit.",
             rewardMin: "For requests, the minimum payment is 10 TASK per person and at least 1 spot is required.",
             taskPosted: "Task published. Remember to collect/verify the fee manually before activating it if needed.",
             copied: "Copied",
@@ -2665,6 +2686,8 @@
             dbBeforeProof: "Conecte o Cloudflare D1 antes de enviar provas reais.",
             dbBeforePost: "Conecte o Cloudflare D1 antes de publicar tarefas reais.",
             requiredListingFields: "Complete alias, Telegram e hash do depósito antes de publicar.",
+            apiHtmlError: "Cloudflare retornou uma página HTML em vez de JSON. Verifique se o último commit foi implantado e se Pages Functions está ativo.",
+            listingCreated: "Publicação recebida. Revise no painel admin para aprovar o depósito.",
             rewardMin: "Para pedidos, o pagamento mínimo é 10 TASK por pessoa e deve haver pelo menos 1 vaga.",
             taskPosted: "Tarefa publicada. Lembre-se de cobrar/verificar a taxa manualmente antes de ativá-la, se necessário.",
             copied: "Copiado",
@@ -2746,6 +2769,8 @@
             dbBeforeProof: "Подключите Cloudflare D1 перед отправкой реальных доказательств.",
             dbBeforePost: "Подключите Cloudflare D1 перед публикацией реальных задач.",
             requiredListingFields: "Заполните псевдоним, Telegram и hash депозита перед публикацией.",
+            apiHtmlError: "Cloudflare вернул HTML-страницу вместо JSON. Проверьте, что развернут последний commit и Pages Functions активны.",
+            listingCreated: "Публикация получена. Проверьте ее в панели админа, чтобы одобрить депозит.",
             rewardMin: "Для запросов минимальная оплата 10 TASK на человека и минимум 1 место.",
             taskPosted: "Задача опубликована. При необходимости вручную проверьте комиссию перед активацией.",
             copied: "Скопировано",
@@ -2827,6 +2852,8 @@
             dbBeforeProof: "提交真实证明前请连接 Cloudflare D1。",
             dbBeforePost: "发布真实任务前请连接 Cloudflare D1。",
             requiredListingFields: "发布前请填写昵称、Telegram 和押金 hash。",
+            apiHtmlError: "Cloudflare 返回了 HTML 页面而不是 JSON。请检查是否已部署最新 commit，并确认 Pages Functions 已启用。",
+            listingCreated: "发布已收到。请在管理员面板中审核并批准押金。",
             rewardMin: "需求任务每人最低支付 10 TASK，并且至少需要 1 个名额。",
             taskPosted: "任务已发布。如需要，请在激活前手动收取/验证费用。",
             copied: "已复制",
@@ -2908,6 +2935,8 @@
             dbBeforeProof: "実際の証明を送信する前にCloudflare D1を接続してください。",
             dbBeforePost: "実際のタスクを公開する前にCloudflare D1を接続してください。",
             requiredListingFields: "公開前にエイリアス、Telegram、デポジットhashを入力してください。",
+            apiHtmlError: "CloudflareがJSONではなくHTMLページを返しました。最新commitがデプロイされ、Pages Functionsが有効か確認してください。",
+            listingCreated: "投稿を受け付けました。管理者パネルでデポジットを承認してください。",
             rewardMin: "依頼では1人あたり最低10 TASK、少なくとも1枠が必要です。",
             taskPosted: "タスクを公開しました。必要に応じて有効化前に手数料を手動で確認してください。",
             copied: "コピー済み",
@@ -3072,9 +3101,11 @@
             data = {};
           }
           if (!response.ok) {
+            const contentType = response.headers.get("content-type") || "";
+            const htmlResponse = contentType.includes("text/html") || /^\s*<!doctype html/i.test(raw) || /^\s*<html/i.test(raw);
             const message = data.detail
               ? `${data.error || "API error"}: ${data.detail}`
-              : data.error || raw.slice(0, 160) || `API error ${response.status}`;
+              : data.error || (htmlResponse ? `${getText("apiHtmlError")} (${response.status})` : raw.slice(0, 160)) || `API error ${response.status}`;
             throw new Error(message);
           }
           return data;
@@ -3082,6 +3113,14 @@
 
         function isValidWallet(value) {
           return /^0x[a-fA-F0-9]{40}$/.test(String(value || "").trim());
+        }
+
+        function setListingStatus(message, ok = false) {
+          const target = $("#listingStatus");
+          if (!target) return;
+          target.textContent = message || "";
+          target.style.display = message ? "block" : "none";
+          target.classList.toggle("ok", ok);
         }
 
         function verificationForCategory(category) {
@@ -3242,8 +3281,10 @@
         async function createListing(event) {
           event.preventDefault();
           event.stopImmediatePropagation();
+          setListingStatus("");
           if (!app.apiOnline) {
             alert(getText("dbBeforePost"));
+            setListingStatus(getText("dbBeforePost"));
             return;
           }
 
@@ -3255,18 +3296,22 @@
           const depositTx = $("#depositTx").value.trim();
           if (!ownerName || !ownerTelegram || !depositTx) {
             alert(getText("requiredListingFields"));
+            setListingStatus(getText("requiredListingFields"));
             return;
           }
           if (ownerWallet && !isValidWallet(ownerWallet)) {
             alert(getText("invalidWallet"));
+            setListingStatus(getText("invalidWallet"));
             return;
           }
           if (type === "offer" && !isValidWallet(ownerWallet)) {
             alert(getText("offerWalletRequired"));
+            setListingStatus(getText("offerWalletRequired"));
             return;
           }
           if (!/^0x[a-fA-F0-9]{64}$/.test(depositTx)) {
             alert(getText("depositHashPrompt"));
+            setListingStatus(getText("depositHashPrompt"));
             return;
           }
           const reward = type === "offer" ? 0 : Number($("#listingReward").value || 0);
@@ -3276,6 +3321,7 @@
           const description = $("#listingDescription").value.trim();
           if (!title || !description || (type === "request" && (!Number.isFinite(reward) || reward < 10 || participantLimit < 1))) {
             alert(getText("rewardMin"));
+            setListingStatus(getText("rewardMin"));
             return;
           }
           const totalDeposit = type === "offer" ? CREATE_TASK_FEE : Math.floor(reward) * participantLimit + CREATE_TASK_FEE;
@@ -3303,9 +3349,11 @@
             $("#listingParticipants").value = 1;
             updateDepositTotal();
             await loadListings();
+            setListingStatus(getText("listingCreated"), true);
             alert(getText("taskPostedPending"));
           } catch (error) {
             $("#listingDepositTotal").textContent = getText("error");
+            setListingStatus(error.message);
             alert(error.message);
           }
         }
