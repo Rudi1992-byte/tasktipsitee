@@ -505,6 +505,78 @@
         gap: 8px;
       }
 
+      .faucet-pro-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+        gap: 16px;
+        align-items: stretch;
+        margin-top: 16px;
+        border: 1px solid rgba(55, 217, 155, 0.22);
+        border-radius: 8px;
+        padding: 18px;
+        background:
+          radial-gradient(circle at top right, rgba(153, 242, 79, 0.13), transparent 32%),
+          linear-gradient(135deg, rgba(8, 18, 15, 0.96), rgba(16, 24, 22, 0.84));
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+      }
+
+      .faucet-pro-card h3 {
+        margin: 8px 0 10px;
+        font-size: 1.22rem;
+      }
+
+      .faucet-pro-card p {
+        color: var(--muted);
+        line-height: 1.58;
+      }
+
+      .faucet-pro-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin: 14px 0;
+      }
+
+      .faucet-pro-metrics span {
+        display: grid;
+        gap: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.82rem;
+      }
+
+      .faucet-pro-metrics strong {
+        color: var(--green);
+        font-size: 1.03rem;
+      }
+
+      .faucet-pro-panel {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .faucet-pro-panel article {
+        border: 1px solid rgba(255, 209, 102, 0.16);
+        border-radius: 8px;
+        padding: 12px;
+        background: rgba(255, 209, 102, 0.06);
+      }
+
+      .faucet-pro-panel strong {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--gold);
+      }
+
+      .faucet-pro-panel span {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
       .terminal-list {
         display: grid;
         gap: 10px;
@@ -1203,6 +1275,8 @@
         .feature-grid,
         .terminal-grid,
         .terminal-card,
+        .faucet-pro-card,
+        .faucet-pro-metrics,
         .oggverse-callout,
         .verify-grid,
         .flow,
@@ -1257,6 +1331,7 @@
         <div class="links">
           <a href="#detalles">Detalles</a>
           <a href="#terminal">Terminal</a>
+          <a href="#faucet-pro">Faucet Pro</a>
           <a href="#verificacion">Verificación</a>
           <a href="#reglas">Reglas</a>
           <a href="#marketplace">Marketplace</a>
@@ -1488,6 +1563,45 @@
               </div>
             </div>
           </div>
+          <article class="faucet-pro-card" id="faucet-pro">
+            <div>
+              <span class="mini-label">Faucet Pro + Ads</span>
+              <h3>Faucet Pro abre TASKTIP a más usuarios cripto.</h3>
+              <p>
+                Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en
+                PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia
+                preparada para tráfico internacional. También incluye espacios publicitarios
+                visibles para proyectos que quieran mostrar su marca frente a usuarios activos.
+              </p>
+              <div class="faucet-pro-metrics">
+                <span><strong>3 monedas</strong>PEPE, DOGE y LTC</span>
+                <span><strong>1 hora</strong>Tiempo entre reclamos</span>
+                <span><strong>Desde USD 1/día</strong>Espacios publicitarios</span>
+              </div>
+              <div class="terminal-actions">
+                <a class="btn primary" href="https://faucetpro.tasktip.xyz/#reclamar" target="_blank" rel="noreferrer">
+                  Reclamar en Faucet Pro
+                </a>
+                <a class="btn secondary" href="https://faucetpro.tasktip.xyz/#publicidad" target="_blank" rel="noreferrer">
+                  Ver anuncios disponibles
+                </a>
+              </div>
+            </div>
+            <div class="faucet-pro-panel" aria-label="Detalles de Faucet Pro">
+              <article>
+                <strong>Pagos vía FaucetPay</strong>
+                <span>Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.</span>
+              </article>
+              <article>
+                <strong>Publicidad para proyectos</strong>
+                <span>El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.</span>
+              </article>
+              <article>
+                <strong>Protección y métricas</strong>
+                <span>Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.</span>
+              </article>
+            </div>
+          </article>
           <article class="oggverse-callout">
             <img src="assets/oggverse-tasktip.jpeg" alt="Arte de OGGVerse para el ecosistema OOGChain" />
             <div>
@@ -1996,6 +2110,23 @@
             "Faucet TASK": "TASK Faucet",
             "@Faucettaskbot permite que nuevos usuarios reclamen TASK para probar el ecosistema, entrar al marketplace y empezar a participar sin fricción.": "@Faucettaskbot lets new users claim TASK to try the ecosystem, enter the marketplace and start participating smoothly.",
             "Abrir faucet": "Open faucet",
+            "Faucet Pro + Ads": "Faucet Pro + Ads",
+            "Faucet Pro abre TASKTIP a más usuarios cripto.": "Faucet Pro opens TASKTIP to more crypto users.",
+            "Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia preparada para tráfico internacional. También incluye espacios publicitarios visibles para proyectos que quieran mostrar su marca frente a usuarios activos.": "Faucet Pro is TASKTIP's extended faucet: it lets users claim rewards in PEPE, DOGE and LTC through FaucetPay, with anti-bot protection and an experience prepared for international traffic. It also includes visible ad spaces for projects that want to show their brand to active users.",
+            "3 monedas": "3 coins",
+            "PEPE, DOGE y LTC": "PEPE, DOGE and LTC",
+            "1 hora": "1 hour",
+            "Tiempo entre reclamos": "Time between claims",
+            "Desde USD 1/día": "From USD 1/day",
+            "Espacios publicitarios": "Ad spaces",
+            "Reclamar en Faucet Pro": "Claim on Faucet Pro",
+            "Ver anuncios disponibles": "View available ads",
+            "Pagos vía FaucetPay": "Payments through FaucetPay",
+            "Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.": "Users can claim quick rewards using a destination linked to FaucetPay.",
+            "Publicidad para proyectos": "Advertising for projects",
+            "El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.": "The site offers banners, featured blocks and sponsored cards for crypto campaigns.",
+            "Protección y métricas": "Protection and metrics",
+            "Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.": "It includes anti-bot protection, visitor statistics and campaign-ready spaces.",
             "Últimos agregados": "Latest additions",
             "Consulta de forma rápida qué tokens nuevos aparecen en CaveSwap.": "Quickly check which new tokens appear on CaveSwap.",
             "Seguimiento del ecosistema": "Ecosystem tracking",
@@ -2330,6 +2461,22 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "O pagamento do trabalho é combinado diretamente entre as partes; para operações sensíveis, podem pedir intermediação antes de pagar.",
             "Launch": "Lançamento",
             "Task Board": "Painel de tarefas",
+            "Faucet Pro abre TASKTIP a más usuarios cripto.": "Faucet Pro abre o TASKTIP para mais usuários cripto.",
+            "Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia preparada para tráfico internacional. También incluye espacios publicitarios visibles para proyectos que quieran mostrar su marca frente a usuarios activos.": "Faucet Pro é o faucet estendido do TASKTIP: permite reclamar recompensas em PEPE, DOGE e LTC via FaucetPay, com proteção anti-bot e experiência preparada para tráfego internacional. Também inclui espaços publicitários visíveis para projetos que queiram mostrar sua marca a usuários ativos.",
+            "3 monedas": "3 moedas",
+            "PEPE, DOGE y LTC": "PEPE, DOGE e LTC",
+            "1 hora": "1 hora",
+            "Tiempo entre reclamos": "Tempo entre reclamos",
+            "Desde USD 1/día": "A partir de USD 1/dia",
+            "Espacios publicitarios": "Espaços publicitários",
+            "Reclamar en Faucet Pro": "Reclamar no Faucet Pro",
+            "Ver anuncios disponibles": "Ver anúncios disponíveis",
+            "Pagos vía FaucetPay": "Pagamentos via FaucetPay",
+            "Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.": "Os usuários podem reclamar recompensas rápidas usando um destino vinculado ao FaucetPay.",
+            "Publicidad para proyectos": "Publicidade para projetos",
+            "El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.": "O site oferece banners, blocos destacados e cartões patrocinados para campanhas cripto.",
+            "Protección y métricas": "Proteção e métricas",
+            "Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.": "Conta com proteção anti-bot, estatísticas de visitantes e espaços prontos para campanhas.",
             "Tareas pagadas": "Tarefas pagas",
             "Pruebas marcadas como pagadas por el admin.": "Provas marcadas como pagas pelo admin.",
             "TASK distribuidos": "TASK distribuídos",
@@ -2411,6 +2558,22 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "Оплата работы согласуется напрямую между сторонами; для чувствительных сделок можно запросить посредничество до оплаты.",
             "Launch": "Запуск",
             "Task Board": "Доска задач",
+            "Faucet Pro abre TASKTIP a más usuarios cripto.": "Faucet Pro открывает TASKTIP для большего числа крипто-пользователей.",
+            "Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia preparada para tráfico internacional. También incluye espacios publicitarios visibles para proyectos que quieran mostrar su marca frente a usuarios activos.": "Faucet Pro — расширенный faucet TASKTIP: он позволяет получать награды в PEPE, DOGE и LTC через FaucetPay, с антибот-защитой и опытом для международного трафика. Также есть видимые рекламные места для проектов, которые хотят показать бренд активным пользователям.",
+            "3 monedas": "3 монеты",
+            "PEPE, DOGE y LTC": "PEPE, DOGE и LTC",
+            "1 hora": "1 час",
+            "Tiempo entre reclamos": "Время между заявками",
+            "Desde USD 1/día": "От USD 1/день",
+            "Espacios publicitarios": "Рекламные места",
+            "Reclamar en Faucet Pro": "Получить в Faucet Pro",
+            "Ver anuncios disponibles": "Посмотреть рекламу",
+            "Pagos vía FaucetPay": "Выплаты через FaucetPay",
+            "Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.": "Пользователи могут быстро получать награды на адрес, связанный с FaucetPay.",
+            "Publicidad para proyectos": "Реклама для проектов",
+            "El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.": "Сайт предлагает баннеры, выделенные блоки и спонсорские карточки для крипто-кампаний.",
+            "Protección y métricas": "Защита и метрики",
+            "Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.": "Есть антибот-защита, статистика посетителей и места, готовые для кампаний.",
             "Tareas pagadas": "Оплаченные задачи",
             "Pruebas marcadas como pagadas por el admin.": "Доказательства, отмеченные админом как оплаченные.",
             "TASK distribuidos": "Распределено TASK",
@@ -2492,6 +2655,22 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "工作付款由双方直接协商；对于敏感交易，可在付款前请求中介服务。",
             "Launch": "上线",
             "Task Board": "任务面板",
+            "Faucet Pro abre TASKTIP a más usuarios cripto.": "Faucet Pro 让更多加密用户进入 TASKTIP。",
+            "Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia preparada para tráfico internacional. También incluye espacios publicitarios visibles para proyectos que quieran mostrar su marca frente a usuarios activos.": "Faucet Pro 是 TASKTIP 的扩展 faucet：用户可通过 FaucetPay 领取 PEPE、DOGE 和 LTC 奖励，带有防机器人保护，并面向国际流量优化。它还提供可见广告位，方便项目向活跃用户展示品牌。",
+            "3 monedas": "3 种币",
+            "PEPE, DOGE y LTC": "PEPE、DOGE 和 LTC",
+            "1 hora": "1 小时",
+            "Tiempo entre reclamos": "领取间隔",
+            "Desde USD 1/día": "每日起 USD 1",
+            "Espacios publicitarios": "广告位",
+            "Reclamar en Faucet Pro": "在 Faucet Pro 领取",
+            "Ver anuncios disponibles": "查看可用广告",
+            "Pagos vía FaucetPay": "通过 FaucetPay 支付",
+            "Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.": "用户可以使用关联 FaucetPay 的收款目标快速领取奖励。",
+            "Publicidad para proyectos": "项目广告",
+            "El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.": "网站提供横幅、重点展示位和赞助卡片，适合加密营销活动。",
+            "Protección y métricas": "保护与数据",
+            "Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.": "包含防机器人保护、访问者统计和可用于活动的广告位。",
             "Tareas pagadas": "已支付任务",
             "Pruebas marcadas como pagadas por el admin.": "管理员标记为已支付的证明。",
             "TASK distribuidos": "已分发 TASK",
@@ -2573,6 +2752,22 @@
             "El pago del trabajo se acuerda directo entre las partes; para operaciones sensibles pueden pedir intermediación antes de pagar.": "作業の支払いは当事者間で直接合意します。慎重な取引では、支払い前に仲介を依頼できます。",
             "Launch": "ローンチ",
             "Task Board": "タスクボード",
+            "Faucet Pro abre TASKTIP a más usuarios cripto.": "Faucet Pro は TASKTIP をより多くの暗号資産ユーザーへ広げます。",
+            "Faucet Pro es el faucet extendido de TASKTIP: permite reclamar recompensas en PEPE, DOGE y LTC mediante FaucetPay, con protección anti-bot y una experiencia preparada para tráfico internacional. También incluye espacios publicitarios visibles para proyectos que quieran mostrar su marca frente a usuarios activos.": "Faucet Pro は TASKTIP の拡張 faucet です。FaucetPay 経由で PEPE、DOGE、LTC の報酬を請求でき、ボット対策と国際トラフィック向けの体験を備えています。アクティブユーザーにブランドを見せたいプロジェクト向けの広告枠もあります。",
+            "3 monedas": "3通貨",
+            "PEPE, DOGE y LTC": "PEPE、DOGE、LTC",
+            "1 hora": "1時間",
+            "Tiempo entre reclamos": "請求間隔",
+            "Desde USD 1/día": "1日 USD 1から",
+            "Espacios publicitarios": "広告枠",
+            "Reclamar en Faucet Pro": "Faucet Proで請求",
+            "Ver anuncios disponibles": "利用可能な広告を見る",
+            "Pagos vía FaucetPay": "FaucetPay経由の支払い",
+            "Los usuarios pueden reclamar recompensas rápidas usando destino vinculado a FaucetPay.": "ユーザーはFaucetPayに紐づいた宛先で素早く報酬を請求できます。",
+            "Publicidad para proyectos": "プロジェクト向け広告",
+            "El sitio ofrece banners, bloques destacados y tarjetas patrocinadas para campañas cripto.": "サイトには暗号資産キャンペーン向けのバナー、注目枠、スポンサー付きカードがあります。",
+            "Protección y métricas": "保護と指標",
+            "Cuenta con protección anti-bot, estadísticas de visitantes y espacios preparados para campañas.": "ボット対策、訪問者統計、キャンペーン用の広告枠を備えています。",
             "Tareas pagadas": "支払い済みタスク",
             "Pruebas marcadas como pagadas por el admin.": "管理者が支払い済みにした証明。",
             "TASK distribuidos": "配布済みTASK",
