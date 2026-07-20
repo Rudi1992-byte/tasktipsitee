@@ -460,7 +460,7 @@
 
       .terminal-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 14px;
       }
 
@@ -1331,6 +1331,7 @@
         <div class="links">
           <a href="#detalles">Detalles</a>
           <a href="#terminal">Terminal</a>
+          <a href="https://superdex.tasktip.xyz/" target="_blank" rel="noopener noreferrer">SuperDEX</a>
           <a href="#faucet-pro">Faucet Pro</a>
           <a href="#verificacion">Verificación</a>
           <a href="#reglas">Reglas</a>
@@ -1386,6 +1387,7 @@
               rel="noreferrer"
             ><span class="swap-mark" aria-hidden="true"><img class="swap-logo" src="assets/caveswap-logo.png" alt="" /></span>Comprar / vender TASK</a>
             <a class="btn secondary" href="#terminal">Abrir terminal</a>
+            <a class="btn primary" href="https://superdex.tasktip.xyz/" target="_blank" rel="noopener noreferrer">Abrir SuperDEX</a>
             <button class="btn secondary" id="copyHero" type="button">Copiar contrato</button>
           </div>
         </div>
@@ -1510,13 +1512,28 @@
       <section id="terminal">
         <div class="shell">
           <div class="section-head">
-            <h2>Terminal CaveSwap y Faucet TASK</h2>
+            <h2>SuperDEX, CaveSwap y Faucet TASK</h2>
             <p>
-              Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet
+              Opera monedas EVM desde SuperDEX, sigue los tokens de CaveSwap y usa el faucet
               para que nuevos usuarios puedan probar TASK dentro del ecosistema.
             </p>
           </div>
           <div class="terminal-grid">
+            <article class="terminal-card">
+              <div class="terminal-icon">S</div>
+              <div>
+                <h3>SuperDEX oficial</h3>
+                <p>
+                  Exchange EVM no custodial para operar desde tu propia wallet en Ethereum,
+                  Base, Arbitrum, Polygon, BNB Chain, Robinhood Chain y OGG Chain.
+                </p>
+                <div class="terminal-actions">
+                  <a class="btn primary" href="https://superdex.tasktip.xyz/" target="_blank" rel="noopener noreferrer">
+                    Abrir SuperDEX
+                  </a>
+                </div>
+              </div>
+            </article>
             <article class="terminal-card">
               <div class="terminal-icon">C</div>
               <div>
@@ -2103,8 +2120,11 @@
             "Tips en TASK": "TASK tips",
             "Ficha técnica": "Token facts",
             "Nombre": "Name",
-            "Terminal CaveSwap y Faucet TASK": "CaveSwap Terminal and TASK Faucet",
-            "Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet para que nuevos usuarios puedan probar TASK dentro del ecosistema.": "Follow CaveSwap tokens, spot the latest additions and keep the faucet so new users can try TASK inside the ecosystem.",
+            "SuperDEX, CaveSwap y Faucet TASK": "SuperDEX, CaveSwap and TASK Faucet",
+            "Opera monedas EVM desde SuperDEX, sigue los tokens de CaveSwap y usa el faucet para que nuevos usuarios puedan probar TASK dentro del ecosistema.": "Trade EVM coins through SuperDEX, follow CaveSwap tokens and use the faucet so new users can try TASK within the ecosystem.",
+            "SuperDEX oficial": "Official SuperDEX",
+            "Exchange EVM no custodial para operar desde tu propia wallet en Ethereum, Base, Arbitrum, Polygon, BNB Chain, Robinhood Chain y OGG Chain.": "Non-custodial EVM exchange for trading from your own wallet on Ethereum, Base, Arbitrum, Polygon, BNB Chain, Robinhood Chain and OGG Chain.",
+            "Abrir SuperDEX": "Open SuperDEX",
             "Explora nuevos tokens": "Explore new tokens",
             "La terminal muestra los tokens listados en CaveSwap, con foco en los proyectos agregados recientemente para que la comunidad pueda revisar oportunidades, contratos y movimiento del mercado desde un solo lugar.": "The terminal shows tokens listed on CaveSwap, focused on recently added projects so the community can review opportunities, contracts and market movement from one place.",
             "Faucet TASK": "TASK Faucet",
@@ -2231,7 +2251,9 @@
             "Abrir marketplace": "Abrir marketplace",
             "Comprar / vender TASK": "Comprar / vender TASK",
             "Abrir terminal": "Abrir terminal",
-            "Terminal CaveSwap y Faucet TASK": "Terminal CaveSwap e Faucet TASK",
+            "SuperDEX, CaveSwap y Faucet TASK": "SuperDEX, CaveSwap e Faucet TASK",
+            "SuperDEX oficial": "SuperDEX oficial",
+            "Abrir SuperDEX": "Abrir SuperDEX",
             "Sigue los tokens de CaveSwap, detecta los últimos agregados y conserva el faucet para que nuevos usuarios puedan probar TASK dentro del ecosistema.": "Acompanhe os tokens da CaveSwap, detecte os últimos adicionados e mantenha o faucet para novos usuários testarem TASK no ecossistema.",
             "Explora nuevos tokens": "Explore novos tokens",
             "La terminal muestra los tokens listados en CaveSwap, con foco en los proyectos agregados recientemente para que la comunidad pueda revisar oportunidades, contratos y movimiento del mercado desde un solo lugar.": "O terminal mostra os tokens listados na CaveSwap, com foco nos projetos adicionados recentemente para a comunidade revisar oportunidades, contratos e movimento do mercado em um só lugar.",
@@ -2279,7 +2301,9 @@
             "Abrir marketplace": "Открыть маркетплейс",
             "Comprar / vender TASK": "Купить / продать TASK",
             "Abrir terminal": "Открыть терминал",
-            "Terminal CaveSwap y Faucet TASK": "Терминал CaveSwap и Faucet TASK",
+            "SuperDEX, CaveSwap y Faucet TASK": "SuperDEX, CaveSwap и Faucet TASK",
+            "SuperDEX oficial": "Официальный SuperDEX",
+            "Abrir SuperDEX": "Открыть SuperDEX",
             "Explora nuevos tokens": "Изучайте новые токены",
             "Faucet TASK": "Faucet TASK",
             "Abrir faucet": "Открыть faucet",
@@ -2317,7 +2341,9 @@
             "Abrir marketplace": "打开市场",
             "Comprar / vender TASK": "买入 / 卖出 TASK",
             "Abrir terminal": "打开终端",
-            "Terminal CaveSwap y Faucet TASK": "CaveSwap 终端和 TASK Faucet",
+            "SuperDEX, CaveSwap y Faucet TASK": "SuperDEX、CaveSwap 和 TASK Faucet",
+            "SuperDEX oficial": "官方 SuperDEX",
+            "Abrir SuperDEX": "打开 SuperDEX",
             "Explora nuevos tokens": "探索新代币",
             "Faucet TASK": "TASK Faucet",
             "Abrir faucet": "打开 faucet",
@@ -2355,7 +2381,9 @@
             "Abrir marketplace": "マーケットを開く",
             "Comprar / vender TASK": "TASK を売買",
             "Abrir terminal": "ターミナルを開く",
-            "Terminal CaveSwap y Faucet TASK": "CaveSwapターミナルとTASK Faucet",
+            "SuperDEX, CaveSwap y Faucet TASK": "SuperDEX、CaveSwap、TASK Faucet",
+            "SuperDEX oficial": "公式SuperDEX",
+            "Abrir SuperDEX": "SuperDEXを開く",
             "Explora nuevos tokens": "新しいトークンを見る",
             "Faucet TASK": "TASK Faucet",
             "Abrir faucet": "Faucetを開く",
