@@ -6,3 +6,7 @@ dist/
 .DS_Store
 Thumbs.db
 tasktipsite/
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
